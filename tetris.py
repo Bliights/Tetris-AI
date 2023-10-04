@@ -5,11 +5,11 @@ import random
 pygame.init()
 
 # Tetris game constants
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-GRID_SIZE = 50
-GRID_WIDTH = SCREEN_WIDTH // GRID_SIZE
-GRID_HEIGHT = SCREEN_HEIGHT // GRID_SIZE
+GRID_WIDTH = 10
+GRID_HEIGHT = 20
+CELL_SIZE = 20
+SCREEN_WIDTH = GRID_WIDTH * CELL_SIZE
+SCREEN_HEIGHT = GRID_HEIGHT * CELL_SIZE
 FPS = 30
 GRAVITY = 1
 
@@ -47,19 +47,37 @@ class TetrisGame:
         if self.is_valid_move(rotated_shape, self.current_piece["row"], self.current_piece["col"]):
             self.current_piece["shape"] = rotated_shape
 
-    def move_piece_left(self):
-        if self.is_valid_move(self.current_piece["shape"], self.current_piece["row"], self.current_piece["col"] - 1):
-            self.current_piece["col"] -= 1
+    def move_piece_left(self, moveleft):
+        while moveleft == True:
+            
+            if self.is_valid_move(self.current_piece["shape"], self.current_piece["row"], self.current_piece["col"] - 1):
+                self.current_piece["col"] -= 1
+            else:
+                break
+        #if self.is_valid_move(self.current_piece["shape"], self.current_piece["row"], self.current_piece["col"] - 1):
+        #    self.current_piece["col"] -= 1
 
-    def move_piece_right(self):
-        if self.is_valid_move(self.current_piece["shape"], self.current_piece["row"], self.current_piece["col"] + 1):
-            self.current_piece["col"] += 1
+    def move_piece_right(self, moveright):
+        while moveright == True:
+            if self.is_valid_move(self.current_piece["shape"], self.current_piece["row"], self.current_piece["col"] + 1):
+                self.current_piece["col"] += 1
+            else:
+                break
+        #if self.is_valid_move(self.current_piece["shape"], self.current_piece["row"], self.current_piece["col"] + 1):
+        #    self.current_piece["col"] += 1
 
     def move_piece_down(self):
         if self.is_valid_move(self.current_piece["shape"], self.current_piece["row"] + 1, self.current_piece["col"]):
             self.current_piece["row"] += 1
         else:
             self.place_piece()
+    
+    def speed_move_piece_down(self, movedown):
+        while movedown == True:
+            if self.is_valid_move(self.current_piece["shape"], self.current_piece["row"] + 1, self.current_piece["col"]):
+                self.current_piece["row"] += 1
+            else:
+                break
 
     def place_piece(self):
         shape = self.current_piece["shape"]
@@ -134,13 +152,24 @@ while is_running:
             is_running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                game.move_piece_left()
+                game.move_piece_left(moveleft=True)
             elif event.key == pygame.K_RIGHT:
-                game.move_piece_right()
+                game.move_piece_right(moveright=True)
             elif event.key == pygame.K_DOWN:
-                game.move_piece_down()
+                game.speed_move_piece_down(movedown=True)
+                print("pressed down")
             elif event.key == pygame.K_UP:
-                game.rotate_piece()
+                game.rotate_piece(moverotate=True)
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                game.move_piece_left(moveleft=False)
+            elif event.key == pygame.K_RIGHT:
+                game.move_piece_right(moveright=False)
+            elif event.key == pygame.K_DOWN:
+                game.speed_move_piece_down(movedown=False)
+                print("let go down")
+            elif event.key == pygame.K_UP:
+                game.rotate_piece(moverotate=False)
 
     # Update game logic
     game.gravity_timer -= 1
@@ -155,8 +184,8 @@ while is_running:
     for i in range(GRID_HEIGHT):
         for j in range(GRID_WIDTH):
             if game.board[i][j] == 1:
-                pygame.draw.rect(display, GREEN, (j * GRID_SIZE, i * GRID_SIZE, GRID_SIZE, GRID_SIZE))
-            pygame.draw.rect(display, WHITE, (j * GRID_SIZE, i * GRID_SIZE, GRID_SIZE, GRID_SIZE), 1)
+                pygame.draw.rect(display, GREEN, (j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            pygame.draw.rect(display, WHITE, (j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE), 1)
 
     # Draw current piece
     shape = game.current_piece["shape"]
@@ -165,7 +194,7 @@ while is_running:
     for i in range(len(shape)):
         for j in range(len(shape[0])):
             if shape[i][j] == 1:
-                pygame.draw.rect(display, BLUE, ((col + j) * GRID_SIZE, (row + i) * GRID_SIZE, GRID_SIZE, GRID_SIZE))
+                pygame.draw.rect(display, BLUE, ((col + j) * CELL_SIZE, (row + i) * CELL_SIZE, CELL_SIZE, CELL_SIZE))
 
     pygame.display.update()
     clock.tick(FPS)
