@@ -1,4 +1,4 @@
-# Tetris_ai
+# Tetris-AI
 
 # How to run
 
@@ -6,7 +6,7 @@
    `pip install -r requirements.txt`
 2. Run `python tetris.py`
 
-## TODO
+## TO DO
 
 - [] Correct size of the board
 - [] Add score
