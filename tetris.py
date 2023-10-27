@@ -1,5 +1,5 @@
 import pygame
-from constants import gravity,screenWidth, screenHeight, colors
+from constants import gravity, colors
 from board import Board
 from clock import Clock
 from piece import Piece
@@ -15,10 +15,21 @@ class TetrisGame:
         self.gravity_timer = gravity
         self.game_over = False
     
+    def draw_score(self,screen):
+        police = pygame.font.Font(None, 36)
+        text = police.render("Score: " + str(self.score), True, colors["black"])
+        screen.blit(text, (10, 10))
+    
+    def draw_game_over(self,screen):
+        police = pygame.font.Font(None, 36)
+        text = police.render("Game Over", True, colors["red"])
+        screen.blit(text, (screen.get_width()//2, screen.get_height()//2))
+    
     def draw(self, screen):  
         self.board.draw_board(screen)
         self.current_piece.draw_piece(screen)
-    
+        self.draw_score(screen)
+        self.next_piece.draw_next_piece(screen)
     
     def piece_down(self):
         if not self.board.move_piece_down(self.current_piece):
@@ -28,16 +39,14 @@ class TetrisGame:
                 self.add_score(lineClear)
                 game.current_piece = game.next_piece
                 game.next_piece = Piece()
-    
-    
+       
     def update(self):
         if not self.game_over:
             self.gravity_timer -= 1
             if self.gravity_timer == 0:
                 self.piece_down()
                 self.gravity_timer = gravity
-            
-            
+                      
     def check_game_over(self):
         if self.current_piece.x == 0 and (
         not self.board.is_valid_move(
@@ -45,14 +54,12 @@ class TetrisGame:
         self.current_piece.x, 
         self.current_piece.y)):
             self.game_over = True
-    
-        
+           
     def add_score(self, lineClear):
         score_multiplier = {1: 40, 2: 100, 3: 300, 4: 1200}
         if lineClear in score_multiplier:
             toAdd = score_multiplier[lineClear]
             self.score += toAdd * (self.level + 1)
-
 
     
 pygame.init()
@@ -67,8 +74,15 @@ key_state = {
     pygame.K_UP: False
 }
 # Initialize game display
+screenWidth = pygame.display.Info().current_w
+screenHeight = pygame.display.Info().current_h
+
 display = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption("Tetris")
+display.fill(colors["white"]) 
+
+
+#TO DO : create a running variable instead of game over and give the choice to play again
  
 while not game.game_over:
     for event in pygame.event.get():
@@ -113,11 +127,16 @@ while not game.game_over:
     game.update()
     
     #Draw the board
-    display.fill(colors["black"])
+    display.fill(colors["white"])
     game.draw(display)
     pygame.display.update()
     
     game.clock.tick()
-    
+
+
+
+
+game.draw_game_over(display)
+
 
 pygame.quit()

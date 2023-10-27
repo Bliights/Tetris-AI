@@ -7,7 +7,6 @@ class Clock:
         self.time_elapsed = 0
         self.fps = fps  
 
-
     def tick(self):
         return self.clock.tick(self.fps)
     

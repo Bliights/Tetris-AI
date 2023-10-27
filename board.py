@@ -5,8 +5,7 @@ class Board:
     def __init__(self):
         self.grid = [[0] * gridWidth for _ in range(gridHeight)]
         self.color = [["black"] * gridWidth for _ in range(gridHeight)]
-       
-        
+              
     def is_valid_move(self,shape,newX,newY):
         for i in range(len(shape)):
             for j in range(len(shape[0])):
@@ -18,14 +17,12 @@ class Board:
                     return False
         return True    
 
-
     def move_piece_left(self, piece):
         if self.is_valid_move(piece.shape,piece.x,piece.y - 1):
             piece.y -= 1
             return True
         else:
             return False
-
 
     def move_piece_right(self, piece):
         if self.is_valid_move(piece.shape,piece.x,piece.y + 1):
@@ -34,14 +31,12 @@ class Board:
         else:
             return False
 
-
     def move_piece_down(self, piece):
         if self.is_valid_move(piece.shape,piece.x + 1,piece.y):
             piece.x += 1
             return True
         else:
             return False
-
 
     def rotate_piece(self, piece):
         rotated_shape = list(map(list, zip(*reversed(piece.shape))))
@@ -50,7 +45,6 @@ class Board:
             return True
         else:
             return False
-
 
     def place_piece(self,piece):
         if self.is_valid_move(
@@ -63,8 +57,7 @@ class Board:
                     if piece.shape[i][j] == 1:
                         self.grid[piece.x + i][piece.y + j] = 1
                         self.color[piece.x + i][piece.y + j] = piece.colorName
-        
-            
+                 
     def clear_lines(self):
         full_lines = []
         for i in range(gridHeight):
@@ -77,29 +70,27 @@ class Board:
             self.grid.insert(0, [0] * gridWidth)
         return len(full_lines)
 
-
     def draw_board(self,screen):
        for i in range(gridHeight):
         for j in range(gridWidth):
             pygame.draw.rect(
                 screen, 
                 colors[self.color[i][j]], 
-                (j * cellSize, 
-                 i * cellSize, 
+                ((j* cellSize + (screen.get_width() - gridWidth* cellSize)//2), 
+                 (i* cellSize + (screen.get_height() - gridHeight* cellSize)//2), 
                  cellSize, 
                  cellSize)
             )
             pygame.draw.rect(
                 screen, 
                 colors["black"], 
-                (j * cellSize, 
-                i * cellSize, 
+                ((j* cellSize + (screen.get_width() - gridWidth* cellSize)//2), 
+                (i* cellSize + (screen.get_height() - gridHeight* cellSize)//2), 
                 cellSize, 
                 cellSize), 
                 1
             )
-              
-            
+                         
     def reset(self):
         self.grid = [[0] * gridWidth for _ in range(gridHeight)]
         self.color = [["white"] * gridWidth for _ in range(gridHeight)]

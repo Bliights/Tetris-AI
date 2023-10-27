@@ -1,8 +1,6 @@
 gridWidth = 10
 gridHeight = 20
 cellSize = 20
-screenWidth = gridWidth*cellSize
-screenHeight = gridHeight*cellSize
 
 fps = 25
 maxFps =60
