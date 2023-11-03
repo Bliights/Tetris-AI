@@ -8,5 +8,6 @@
 
 ## TO DO
 
-- [] Correct size of the board
-- [] Add score
+- AI
+- Enhance the user interface and the end of the game
+- Implement score saving management
