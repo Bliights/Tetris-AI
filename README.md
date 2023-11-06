@@ -9,5 +9,4 @@
 ## TO DO
 
 - AI
-- Enhance the user interface and the end of the game
-- Implement score saving management
+- Make the home menu

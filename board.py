@@ -98,4 +98,4 @@ class Board:
 
     def reset(self):
         self.grid = [[0] * gridWidth for _ in range(gridHeight)]
-        self.color = [["white"] * gridWidth for _ in range(gridHeight)]
+        self.color = [["black"] * gridWidth for _ in range(gridHeight)]

@@ -15,17 +15,70 @@ class TetrisGame:
         self.gravity_timer = gravity
         self.game_over = False
     
+    def draw_button(self,screen,x,y,buttonLength,buttonHeight,text,policeSize,
+                    textColor,buttonColor):
+        pygame.draw.rect(screen,buttonColor,(x-buttonLength//2,y-buttonHeight//2,buttonLength,buttonHeight),1)
+        police = pygame.font.Font(None, policeSize)
+        textToDraw = police.render(text, True, textColor)
+        text_rect = textToDraw.get_rect(center=(x,y))
+        screen.blit(textToDraw, text_rect)
+    
     def draw_score(self,screen):
         police = pygame.font.Font(None, 36)
         text = police.render("Score: " + str(self.score), True, colors["black"])
         screen.blit(text, (10, 10))
-    
+        
+        
     def draw_game_over(self,screen):
-        police = pygame.font.Font(None, 36)
+        police = pygame.font.Font(None, 100)
         text = police.render("Game Over", True, colors["red"])
-        screen.blit(text, (screen.get_width()//2, screen.get_height()//2))
-    
-    def draw(self, screen):  
+        text_rect = text.get_rect(center=(screen.get_width()//2,screen.get_height()//2))
+        screen.blit(text, text_rect)
+        
+        # Score display
+        police = pygame.font.Font(None, 50)
+        text = police.render("Your score : "+ str(self.score), True, colors["white"])
+        text_rect = text.get_rect(center=(screen.get_width()//2,screen.get_height()//2-screen.get_height()//8))
+        screen.blit(text, text_rect)
+        # Reset Button
+        self.draw_button(screen,
+                         screen.get_width()//2,
+                         screen.get_height()//2+screen.get_height()//10,
+                         100,
+                         50,
+                         "Restart",
+                         30,
+                         colors["white"],
+                         colors["white"])
+        # Menu
+        self.draw_button(screen,
+                         screen.get_width()//2,
+                         screen.get_height()//2+2*screen.get_height()//10,
+                         100,
+                         50,
+                         "Menu",
+                         30,
+                         colors["white"],
+                         colors["white"])
+        # Exit button
+        self.draw_button(screen,
+                         screen.get_width()//2,
+                         screen.get_height()//2+3*screen.get_height()//10,
+                         100,
+                         50,
+                         "Exit",
+                         30,
+                         colors["white"],
+                         colors["white"])
+        
+    def mouse_in_button(self,mouseX,mouseY,buttonX,buttonY,buttonLength,buttonHeight):
+        if buttonX-buttonLength//2<=mouseX<=buttonX+buttonLength//2:
+            if buttonY-buttonHeight//2<=mouseY<=buttonY+buttonHeight//2:
+                return True
+        else:
+            return False
+        
+    def draw_game(self, screen):  
         self.board.draw_board(screen)
         self.current_piece.draw_piece(screen)
         self.draw_score(screen)
@@ -37,8 +90,10 @@ class TetrisGame:
                 self.board.place_piece(self.current_piece)
                 lineClear = self.board.clear_lines()
                 self.add_score(lineClear)
-                game.current_piece = game.next_piece
-                game.next_piece = Piece()
+                self.current_piece = game.next_piece
+                self.next_piece = Piece()
+                self.check_game_over()
+                self.clock.reset_speed()
        
     def update(self):
         if not self.game_over:
@@ -60,10 +115,19 @@ class TetrisGame:
         if lineClear in score_multiplier:
             toAdd = score_multiplier[lineClear]
             self.score += toAdd * (self.level + 1)
-
     
-pygame.init()
+    def reset(self):
+        self.board.reset()
+        self.current_piece = Piece()
+        self.next_piece = Piece()
+        self.clock.reset()
+        self.score = 0
+        self.level = 0
+        self.gravity_timer = gravity
+        self.game_over = False
+    
 
+pygame.init()
 game = TetrisGame() 
 game.clock.reset()
 
@@ -80,63 +144,87 @@ screenHeight = pygame.display.Info().current_h
 display = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption("Tetris")
 display.fill(colors["white"]) 
-
+running = True
 
 #TO DO : create a running variable instead of game over and give the choice to play again
- 
-while not game.game_over:
+while running:
+    while not game.game_over:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    key_state[pygame.K_LEFT] = True
+                elif event.key == pygame.K_RIGHT:
+                    key_state[pygame.K_RIGHT] = True
+                elif event.key == pygame.K_DOWN:
+                    key_state[pygame.K_DOWN] = True
+                elif event.key == pygame.K_UP:
+                    key_state[pygame.K_UP] = True
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT:
+                    key_state[pygame.K_LEFT] = False
+                elif event.key == pygame.K_RIGHT:
+                    key_state[pygame.K_RIGHT] = False
+                elif event.key == pygame.K_DOWN:
+                    key_state[pygame.K_DOWN] = False
+                elif event.key == pygame.K_UP:
+                    key_state[pygame.K_UP] = False
+                game.clock.reset_speed()
+        
+        if key_state[pygame.K_LEFT]:
+            game.board.move_piece_left(game.current_piece)
+            game.clock.acceleration()
+        elif key_state[pygame.K_RIGHT]:
+            game.board.move_piece_right(game.current_piece)
+            game.clock.acceleration()
+        elif key_state[pygame.K_DOWN]:
+            game.board.move_piece_down(game.current_piece)
+            game.clock.acceleration()
+        elif key_state[pygame.K_UP]:
+            game.board.rotate_piece(game.current_piece)
+            game.clock.acceleration()
+          
+        game.clock.tick()
+    
+        game.update()
+    
+        #Draw the board
+        display.fill(colors["white"])
+        game.draw_game(display)
+        pygame.display.update()
+    
+        game.clock.tick()
+    
+    mouse = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                key_state[pygame.K_LEFT] = True
-            elif event.key == pygame.K_RIGHT:
-                key_state[pygame.K_RIGHT] = True
-            elif event.key == pygame.K_DOWN:
-                key_state[pygame.K_DOWN] = True
-            elif event.key == pygame.K_UP:
-                key_state[pygame.K_UP] = True
-        elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT:
-                key_state[pygame.K_LEFT] = False
-            elif event.key == pygame.K_RIGHT:
-                key_state[pygame.K_RIGHT] = False
-            elif event.key == pygame.K_DOWN:
-                key_state[pygame.K_DOWN] = False
-            elif event.key == pygame.K_UP:
-                key_state[pygame.K_UP] = False
-            game.clock.reset_speed()
-        
-    if key_state[pygame.K_LEFT]:
-        game.board.move_piece_left(game.current_piece)
-        game.clock.acceleration()
-    elif key_state[pygame.K_RIGHT]:
-        game.board.move_piece_right(game.current_piece)
-        game.clock.acceleration()
-    elif key_state[pygame.K_DOWN]:
-        game.board.move_piece_down(game.current_piece)
-        game.clock.acceleration()
-    elif key_state[pygame.K_UP]:
-        game.board.rotate_piece(game.current_piece)
-        game.clock.acceleration()
-        
-        
-    game.clock.tick()
-    
-    game.update()
-    
-    #Draw the board
-    display.fill(colors["white"])
-    game.draw(display)
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            # Restart button
+            if game.mouse_in_button(mouse[0],
+                               mouse[1],
+                               screenWidth//2,
+                               screenHeight//2+screenHeight//10,
+                               100,
+                               50):
+                game.reset()
+            # Menu button
+            elif game.mouse_in_button(mouse[0],
+                               mouse[1],
+                               screenWidth//2,
+                               screenHeight//2+2*screenHeight//10,
+                               100,
+                               50):
+                game.reset()    
+            # Exit button
+            elif game.mouse_in_button(mouse[0],
+                               mouse[1],
+                               screenWidth//2,
+                               screenHeight//2+3*screenHeight//10,
+                               100,
+                               50):
+                pygame.quit()
+    display.fill(colors["black"])
+    game.draw_game_over(display)
     pygame.display.update()
-    
-    game.clock.tick()
-
-
-
-
-game.draw_game_over(display)
-
-
-pygame.quit()

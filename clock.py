@@ -22,3 +22,4 @@ class Clock:
 
     def reset(self):
         self.time_elapsed = 0
+        self.fps = fps
