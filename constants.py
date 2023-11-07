@@ -2,9 +2,8 @@ gridWidth = 10
 gridHeight = 20
 cellSize = 20
 
-fps = 25
-maxFps =60
-gravity = 10
+fps = 60
+gravity = 20
 
 shapes = [
     [[1, 1, 1, 1]],

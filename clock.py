@@ -1,5 +1,5 @@
 import pygame
-from constants import fps,maxFps
+from constants import fps
 
 class Clock:
     def __init__(self):
@@ -9,17 +9,9 @@ class Clock:
 
     def tick(self):
         return self.clock.tick(self.fps)
-    
-    def acceleration(self):
-        if fps<=maxFps:
-            self.fps+=5
-    
-    def reset_speed(self):
-        self.fps = fps
         
     def update(self):
-        self.time_elapsed += self.tick()  
-
+        self.time_elapsed += self.clock.get_time()
+        
     def reset(self):
         self.time_elapsed = 0
-        self.fps = fps

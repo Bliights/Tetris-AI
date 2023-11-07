@@ -8,5 +8,9 @@
 
 ## TO DO
 
-- AI
-- Make the home menu
+1. Priority
+   - AI
+   - best score saving
+   - improve piece random generation and fix the colors
+2. If time
+   - improve Design
