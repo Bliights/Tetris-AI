@@ -6,6 +6,7 @@ class Status:
         self.move_left =  False
         self.move_down =  False
         self.rotate = False
+        self.rotate_limiter = True
     
     def set_game_over(self):
         self.game_status = "Game over"

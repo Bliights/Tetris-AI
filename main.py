@@ -1,11 +1,8 @@
 import pygame
 from constants import colors
 from tetrisgame import TetrisGame
-from affichage import mouse_in_button
 
 pygame.init()
-game = TetrisGame() 
-game.clock.tick()
 
 # Initialize game display
 screenWidth = pygame.display.Info().current_w
@@ -14,8 +11,9 @@ screenHeight = pygame.display.Info().current_h
 display = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption("Tetris")
 display.fill(colors["white"]) 
+game = TetrisGame(display) 
+game.clock.tick()
 running = True
-rotate_limit=True
 
 while running:
     if game.status.is_home():
@@ -25,25 +23,17 @@ while running:
             if event.type == pygame.QUIT:
                 pygame.quit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
+                
                 # solo mode
-                if mouse_in_button(screenWidth//2,
-                                   screenHeight//10+screenHeight//10,
-                                   100,
-                                   50):
+                if game.display_elements["Home_soloButton"].mouse_in_element():
                     game.reset()
                     game.status.set_solo()
                 # AI mode
-                elif mouse_in_button(screenWidth//2,
-                                   screenHeight//10+2*screenHeight//10,
-                                   100,
-                                   50):
+                elif game.display_elements["Home_aiButton"].mouse_in_element():
                     game.reset()
                     game.status.set_ai()
                 # Exit button
-                elif mouse_in_button(screenWidth//2,
-                                   screenHeight//10+3*screenHeight//10,
-                                   100,
-                                   50):
+                elif game.display_elements["Home_exitButton"].mouse_in_element():
                     pygame.quit()
                     
     elif game.status.is_solo():
@@ -70,7 +60,8 @@ while running:
                     game.status.move_down = False
                 elif event.key == pygame.K_UP:
                     game.status.rotate = False
-                    rotate_limit=True
+                    game.status.rotate_limiter=True
+        
             
         if game.status.move_left:
             game.move_piece_left()
@@ -78,11 +69,11 @@ while running:
             game.move_piece_right()
         elif game.status.move_down:
             game.move_piece_down()
-        elif game.status.rotate and rotate_limit:
+        elif game.status.rotate and game.status.rotate_limiter:
             game.rotate_piece()
-            rotate_limit=False
+            game.status.rotate_limiter = False
         
-        game.clock.tick()   
+        pygame.time.delay(25)
         game.update_gravity()
         game.clock.tick()
     
@@ -95,24 +86,15 @@ while running:
                 pygame.quit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Restart button
-                if mouse_in_button(screenWidth//2,
-                                   screenHeight//2+screenHeight//10,
-                                   100,
-                                   50):
+                if game.display_elements["Game_over_resetButton"].mouse_in_element():
                     game.reset()
                     game.status.set_solo()
                 # Menu button
-                elif mouse_in_button(screenWidth//2,
-                                   screenHeight//2+2*screenHeight//10,
-                                   100,
-                                   50):
+                elif game.display_elements["Game_over_homeButton"].mouse_in_element():
                     game.reset()
                     game.status.set_home()
                 # Exit button
-                elif mouse_in_button(screenWidth//2,
-                                   screenHeight//2+3*screenHeight//10,
-                                   100,
-                                   50):
+                elif game.display_elements["Game_over_exitButton"].mouse_in_element():
                     pygame.quit()
                     
     elif game.status.is_ai():
