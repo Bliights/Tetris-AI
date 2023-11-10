@@ -11,7 +11,6 @@
 1. Priority
    - AI
    - best score display
-   - improve piece random generation
    - Update the UML
 2. If time
    - improve Design

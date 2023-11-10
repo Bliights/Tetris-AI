@@ -41,7 +41,14 @@ class Board:
             self.grid.pop(line)
             self.grid.insert(0, [0] * gridWidth)
         return len(full_lines)
-
+    
+    # Return the distance of the max drop position
+    def max_drop_position(self,piece):
+        i=1
+        while self.is_valid_move(piece.shape, piece.x, piece.y+i):
+            i+=1
+        return i-1
+    
     # Draw the board at the (x,y) coordinate (top left corner of the board)
     def draw_board(self, screen, x, y):
         for i in range(gridHeight):

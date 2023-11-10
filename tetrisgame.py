@@ -1,4 +1,4 @@
-from constants import fps, gridWidth, gridHeight, cellSize, maxscore
+from constants import gridWidth, gridHeight, cellSize, maxscore
 from board import Board
 from clock import Clock
 from piece import Piece
@@ -14,7 +14,8 @@ class TetrisGame:
         self.clock = Clock()
         self.score = 0
         self.level = 0
-        self.gravity_speed = int(fps*(1-0.1*self.level))
+        self.linesClear = 0
+        self.gravity_speed = 48
         self.gravity_timer = 0
         self.status = Status()
         self.display_elements = {
@@ -56,8 +57,14 @@ class TetrisGame:
                                                 ),
             "Solo_scoreText" : Display_Element(screen.get_width()//2,
                                                 (screen.get_height()- gridHeight*cellSize)//2- 20,
-                                                str(self.score),
-                                                35,
+                                                "Score : "+str(self.score),
+                                                30,
+                                                "black"
+                                                ),
+            "Solo_levelText" : Display_Element(screen.get_width()//2,
+                                                (screen.get_height()- gridHeight*cellSize)//2- 40,
+                                                "Level : "+str(self.level),
+                                                30,
                                                 "black"
                                                 ),
             "Game_over_gameOverText" : Display_Element(screen.get_width()//2,
@@ -69,6 +76,12 @@ class TetrisGame:
             "Game_over_scoreText" : Display_Element(screen.get_width()//2,
                                                     screen.get_height()//2-screen.get_height()//8,
                                                     "Your score : "+ str(self.score),
+                                                    50,
+                                                    "white"
+                                                    ),
+            "Game_over_maxScoreText" : Display_Element(screen.get_width()//2,
+                                                    screen.get_height()//2-2*screen.get_height()//8,
+                                                    "Best score : "+ str(maxscore),
                                                     50,
                                                     "white"
                                                     ),
@@ -144,8 +157,9 @@ class TetrisGame:
                 self.board.place_piece(self.current_piece)
             
                 lineClear = self.board.clear_lines()
+                self.linesClear += lineClear
                 self.update_score(lineClear)
-            
+                
                 self.current_piece = self.next_piece
                 self.next_piece = Piece()
             
@@ -169,31 +183,57 @@ class TetrisGame:
             self.gravity_timer = 0
 
     def update_level(self):
-        if self.score == 2400:
+        if self.linesClear>=10:
+            self.level = 1
+            self.gravity_speed = 43
+        elif self.linesClear>=20:
             self.level = 2
-        elif self.score == 5000:
+            self.gravity_speed = 38
+        elif self.linesClear>=30:
             self.level = 3
-        elif self.score == 10000:
+            self.gravity_speed = 33
+        elif self.linesClear>=40:
             self.level = 4
-        elif self.score == 20000:
+            self.gravity_speed = 28
+        elif self.linesClear>=50:
             self.level = 5
-        elif self.score == 30000:
+            self.gravity_speed = 23
+        elif self.linesClear>=60:
             self.level = 6
-        elif self.score == 40000:
+            self.gravity_speed = 18
+        elif self.linesClear>=70:
             self.level = 7
-        elif self.score == 50000:
+            self.gravity_speed = 13
+        elif self.linesClear>=80:
             self.level = 8
-        elif self.score == 80000:
+            self.gravity_speed = 8
+        elif self.linesClear>=90:
             self.level = 9
-        self.gravity_speed = int(fps*(1-0.1*self.level))
+            self.gravity_speed = 6
+        elif self.linesClear>=100:
+            self.level = 10
+            self.gravity_speed = 5
+        elif self.linesClear>=110:
+            self.level = 11
+            self.gravity_speed = 4
+        elif self.linesClear>=120:
+            self.level = 12
+            self.gravity_speed = 3
+        elif self.linesClear>=130:
+            self.level = 13
+            self.gravity_speed = 2
+        elif self.linesClear>=140:
+            self.level = 14
+            self.gravity_speed = 1
             
     def update_score(self, lineClear):
         score_multiplier = {1: 40, 2: 100, 3: 300, 4: 1200}
         if lineClear in score_multiplier:
             toAdd = score_multiplier[lineClear]
             self.score += toAdd * (self.level + 1)
-            self.display_elements["Solo_scoreText"].text = str(self.score)
+            self.display_elements["Solo_scoreText"].text = "Score : "+str(self.score)
             self.update_level()
+            self.display_elements["Solo_levelText"].text = "Level : "+str(self.level)
              
     def update_score_max(self):
         if self.score>maxscore:
@@ -217,6 +257,10 @@ class TetrisGame:
         self.board.draw_board(screen,
                               (screen.get_width() - gridWidth * cellSize) // 2, 
                               (screen.get_height() - gridHeight * cellSize) // 2)
+        self.current_piece.draw_shadow(screen,
+                                       (screen.get_width() - gridWidth* cellSize)//2,
+                                       (screen.get_height() - gridHeight* cellSize)//2,
+                                       self.board.max_drop_position(self.current_piece))
         self.current_piece.draw_piece(screen,
                                       (screen.get_width() - gridWidth* cellSize)//2,
                                       (screen.get_height() - gridHeight* cellSize)//2)
@@ -224,10 +268,13 @@ class TetrisGame:
                                    (screen.get_width() + 3*gridWidth* cellSize//5)//2,
                                    (screen.get_height() - 3*gridHeight* cellSize//9)//2)
         self.display_elements["Solo_scoreText"].draw(screen)
+        self.display_elements["Solo_levelText"].draw(screen)
+        
         
     def draw_game_over(self,screen):
         self.display_elements["Game_over_gameOverText"].draw(screen)
         self.display_elements["Game_over_scoreText"].draw(screen)
+        self.display_elements["Game_over_maxScoreText"].draw(screen)
         self.display_elements["Game_over_resetButton"].draw(screen)
         self.display_elements["Game_over_homeButton"].draw(screen)
         self.display_elements["Game_over_exitButton"].draw(screen)
@@ -238,8 +285,9 @@ class TetrisGame:
         self.next_piece = Piece()
         self.score = 0
         self.level = 0
+        self.linesClear = 0
         self.gravity_timer = 0
-        self.gravity_speed = int(fps*(1-0.1*self.level))
+        self.gravity_speed = 48
         self.status.reset()
         self.display_elements["Solo_scoreText"].text = str(self.score)
         self.display_elements["Game_over_scoreText"].text = str(self.score)

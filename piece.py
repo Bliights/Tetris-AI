@@ -51,4 +51,27 @@ class Piece:
                         cellSize), 
                         1
                     )
+    
+    # Draw the shadow of the piece at the (x+piece.x,y+piece.y+drop) coordinate
+    def draw_shadow(self, screen, x, y,drop):
+        for i in range(len(self.shape)):
+            for j in range(len(self.shape[0])):
+                if self.shape[i][j] == 1:
+                    pygame.draw.rect(
+                        screen,
+                        colors["black"],
+                        (((self.x + j)* cellSize + x) ,
+                         ((self.y + drop + i)* cellSize + y),
+                         cellSize,
+                         cellSize,),
+                    )
+                    pygame.draw.rect(
+                        screen, 
+                        colors[self.color], 
+                        (((self.x + j)* cellSize + x), 
+                        ((self.y + drop + i)* cellSize + y), 
+                        cellSize, 
+                        cellSize), 
+                        1
+                    )
                     

@@ -73,7 +73,7 @@ while running:
             game.rotate_piece()
             game.status.rotate_limiter = False
         
-        pygame.time.delay(25)
+        pygame.time.delay(30)
         game.update_gravity()
         game.clock.tick()
     
