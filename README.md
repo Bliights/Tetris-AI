@@ -14,7 +14,7 @@ The second component of the project is equally fascinating, involving the develo
    `pip install -r requirements.txt`
 2. Run `python main.py`
 
-## TO DO
+## To do
 
 1. Priority
    - Finish the genetic algorithm for the AI
@@ -22,7 +22,7 @@ The second component of the project is equally fascinating, involving the develo
 2. If time
    - improve Design
 
-## Contributor
+## Contributors
 
 |            Name            |      College      |    Department    |                   Email                   |
 | :------------------------: | :---------------: | :--------------: | :---------------------------------------: |
