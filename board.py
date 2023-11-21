@@ -49,6 +49,66 @@ class Board:
             i+=1
         return i-1
     
+    # Get the pick on the board
+    def get_average_peaks(self):
+        peaks=[0]*gridWidth
+        for i in range(gridWidth):
+            j=0
+            while j<gridHeight and self.grid[j][i]==0:        
+                j+=1
+            peaks[i]=gridHeight-j
+        return sum(peaks)/gridWidth
+    
+    # Get the bumpiness of the board
+    def get_bumpiness(self):
+        previousHeight=0
+        bumpiness = 0
+        for i in range(gridWidth):
+            j=0
+            while j<gridHeight and self.grid[j][i]==0:
+                j+=1
+            if i>0:
+                bumpiness+=abs(previousHeight+j-gridHeight)
+            previousHeight=gridHeight-j
+        return bumpiness
+    
+    # Get the the number of holes in the struct
+    def get_number_holes(self):
+        blockFound = False
+        holes_count = 0
+        for i in range(gridWidth):
+            for j in range(gridHeight):
+                if(self.grid[j][i] == 1):
+                    blockFound = True
+                elif(self.grid[j][i] == 0 and blockFound == True):
+                    holes_count+=1   
+            blockFound = False
+        return holes_count
+    
+    # Count the number of block in the rightmost lane
+    def count_blocks_in_rightmost_lane(self):
+        blocks_right_lane = 0
+        for j in range(gridHeight):
+            if (self.grid[j][gridWidth-1]==1):
+                blocks_right_lane+=1
+        return blocks_right_lane
+    
+    # Get all the position possible for a piece in the board
+    def get_all_position(self,piece):
+        positions = []
+        for r in range(4):
+            for i in range(gridWidth-len(piece.shape[0])+1):
+                j=0
+                while self.is_valid_move(piece.shape, piece.x, piece.y+j):
+                    j+=1
+                positions.append((i,j-1,r))
+            rotated_piece = list(map(list, zip(*reversed(piece.shape))))
+            if self.is_valid_move(rotated_piece, 
+                                    piece.x, 
+                                    piece.y):
+                piece.rotate()
+        return positions
+        
     # Draw the board at the (x,y) coordinate (top left corner of the board)
     def draw_board(self, screen, x, y):
         for i in range(gridHeight):
@@ -78,3 +138,4 @@ class Board:
     def reset(self):
         self.grid = [[0] * gridWidth for _ in range(gridHeight)]
         self.color = [[self.backgroud_color] * gridWidth for _ in range(gridHeight)]
+

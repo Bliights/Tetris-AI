@@ -51,6 +51,8 @@ while running:
                     game.status.move_down = True
                 elif event.key == pygame.K_UP:
                     game.status.rotate = True
+                elif event.key == pygame.K_SPACE:
+                    game.status.drop = True
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
                     game.status.move_left = False
@@ -60,7 +62,10 @@ while running:
                     game.status.move_down = False
                 elif event.key == pygame.K_UP:
                     game.status.rotate = False
-                    game.status.rotate_limiter=True
+                    game.status.rotate_limiter = True
+                elif event.key == pygame.K_SPACE:
+                    game.status.drop = False
+                    game.status.drop_limiter = True
         
             
         if game.status.move_left:
@@ -72,6 +77,9 @@ while running:
         elif game.status.rotate and game.status.rotate_limiter:
             game.rotate_piece()
             game.status.rotate_limiter = False
+        elif game.status.drop and game.status.drop_limiter:
+            game.drop()
+            game.status.drop_limiter = False
         
         pygame.time.delay(30)
         game.update_gravity()

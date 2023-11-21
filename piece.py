@@ -29,6 +29,21 @@ class Piece:
     def rotate(self):
         self.shape = list(map(list, zip(*reversed(self.shape))))
     
+    # Get the instruction to get the piece to a specific position
+    def get_path_to_position(self,position):
+        horizontal_mvt = position[0]-self.x
+        rotations = position[2]
+        path=[]
+        for i in range(abs(horizontal_mvt)):
+            if horizontal_mvt>0:
+                path.append("right")
+            else:
+                path.append("left")
+        for i in range(rotations):
+            path.append("rotate")
+        path.append("drop")
+        return path
+    
     # Draw the piece at the (x,y) coordinate (top left corner of the piece)
     def draw_piece(self, screen, x, y):
         for i in range(len(self.shape)):

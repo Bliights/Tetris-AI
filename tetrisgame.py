@@ -14,7 +14,7 @@ class TetrisGame:
         self.clock = Clock()
         self.score = 0
         self.level = 0
-        self.linesClear = 0
+        self.totaLinesClear = 0
         self.gravity_speed = 48
         self.gravity_timer = 0
         self.status = Status()
@@ -155,9 +155,9 @@ class TetrisGame:
         else:
             if not self.status.is_game_over():
                 self.board.place_piece(self.current_piece)
-            
+                
                 lineClear = self.board.clear_lines()
-                self.linesClear += lineClear
+                self.totaLinesClear += lineClear
                 self.update_score(lineClear)
                 
                 self.current_piece = self.next_piece
@@ -175,6 +175,11 @@ class TetrisGame:
              return True
          else:
              return False
+    def drop(self):
+        is_drop=False
+        while self.move_piece_down():
+            is_drop=True
+        return is_drop
     
     def update_gravity(self):
         self.gravity_timer += 1

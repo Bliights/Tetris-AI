@@ -6,7 +6,9 @@ class Status:
         self.move_left =  False
         self.move_down =  False
         self.rotate = False
+        self.drop = False
         self.rotate_limiter = True
+        self.drop_limiter = True
     
     def set_game_over(self):
         self.game_status = "Game over"
@@ -38,6 +40,9 @@ class Status:
         self.move_left =  False
         self.move_down =  False
         self.rotate = False
+        self.drop = False
+        self.rotate_limiter = True
+        self.drop_limiter = True
     
     def reset(self):
         self.game_status = "Home"
@@ -45,3 +50,6 @@ class Status:
         self.move_left =  False
         self.move_down =  False
         self.rotate = False
+        self.drop = False
+        self.rotate_limiter = True
+        self.drop_limiter = True
