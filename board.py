@@ -1,6 +1,6 @@
 import pygame
 from constants import gridHeight, gridWidth, colors, cellSize
-
+import copy
 
 class Board:
     
@@ -93,22 +93,53 @@ class Board:
                 blocks_right_lane+=1
         return blocks_right_lane
     
-    # Get all the position possible for a piece in the board
-    def get_all_position(self,piece):
+    # Get all the position possible for a piece in the board   
+    def get_all_position(self,pieceGiven):
         positions = []
+        piece = copy.deepcopy(pieceGiven)
         for r in range(4):
-            for i in range(gridWidth-len(piece.shape[0])+1):
-                j=0
-                while self.is_valid_move(piece.shape, piece.x, piece.y+j):
-                    j+=1
-                positions.append((i,j-1,r))
-            rotated_piece = list(map(list, zip(*reversed(piece.shape))))
-            if self.is_valid_move(rotated_piece, 
-                                    piece.x, 
-                                    piece.y):
-                piece.rotate()
+            movePossible=True
+            if r!=0:
+                rotated_piece = list(map(list, zip(*reversed(piece.shape))))
+                if self.is_valid_move(rotated_piece, 
+                                        piece.x, 
+                                        piece.y):
+                    piece.rotate()
+                else:
+                    movePossible=False
+            if movePossible:
+                for i in range(gridWidth-len(piece.shape[0])+1):
+                    movePossible=True
+                    horizontal_mvt = i-piece.x
+                    for h in range(abs(horizontal_mvt)):
+                        if(horizontal_mvt>0):
+                            if self.is_valid_move(piece.shape, 
+                                                piece.x + h+1, 
+                                                piece.y)==False:
+                                movePossible=False
+                                break
+                        else :
+                            if self.is_valid_move(piece.shape, 
+                                                 piece.x -h-1, 
+                                                 piece.y)==False:
+                                movePossible=False
+                                break
+                    if movePossible:
+                        j=piece.y
+                        while self.is_valid_move(piece.shape,i,j):
+                            j+=1
+                        positions.append((i,j-1,r))        
         return positions
-        
+    
+    # Get the max height of the highest line
+    def get_maximum_line_height(self):
+        maxHeight=0
+        for i in range(gridHeight):
+            for j in range(gridWidth):
+                if(self.grid[i][j] == 1 and maxHeight==0):
+                    maxHeight=gridHeight-i
+        return maxHeight
+    
     # Draw the board at the (x,y) coordinate (top left corner of the board)
     def draw_board(self, screen, x, y):
         for i in range(gridHeight):

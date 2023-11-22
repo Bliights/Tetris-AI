@@ -34,13 +34,13 @@ class Piece:
         horizontal_mvt = position[0]-self.x
         rotations = position[2]
         path=[]
+        for i in range(rotations):
+            path.append("rotate")
         for i in range(abs(horizontal_mvt)):
             if horizontal_mvt>0:
                 path.append("right")
             else:
                 path.append("left")
-        for i in range(rotations):
-            path.append("rotate")
         path.append("drop")
         return path
     

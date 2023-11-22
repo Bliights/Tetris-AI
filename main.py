@@ -1,6 +1,7 @@
 import pygame
 from constants import colors
 from tetrisgame import TetrisGame
+from ai import Ai
 
 pygame.init()
 
@@ -12,6 +13,9 @@ display = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption("Tetris")
 display.fill(colors["white"]) 
 game = TetrisGame(display) 
+ai = Ai(display)
+ai.fixMultiplier()
+ai.game.status.set_solo()
 game.clock.tick()
 running = True
 
@@ -106,6 +110,38 @@ while running:
                     pygame.quit()
                     
     elif game.status.is_ai():
-        temp=0
+        if ai.game.status.is_solo():
+            display.fill(colors["white"])
+            ai.game.draw_solo_game(display)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+            if(len(ai.movementPlan)==0):
+                ai.addMoves(ai.getBestMove())
+            ai.nextMove()
+            pygame.time.delay(30)
+            ai.game.update_gravity()
+            ai.game.clock.tick()
+            
+        elif ai.game.status.is_game_over():
+            display.fill(colors["black"])
+            game.status.reset_controls()
+            game.draw_game_over(display)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    # Restart button
+                    if game.display_elements["Game_over_resetButton"].mouse_in_element():
+                        ai.game.reset()
+                        ai.game.status.set_solo()
+                    # Menu button
+                    elif game.display_elements["Game_over_homeButton"].mouse_in_element():
+                        ai.game.reset()
+                        ai.game.status.set_solo()
+                        game.status.set_home()
+                    # Exit button
+                    elif game.display_elements["Game_over_exitButton"].mouse_in_element():
+                        pygame.quit()
         
     pygame.display.update()

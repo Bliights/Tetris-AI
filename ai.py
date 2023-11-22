@@ -1,5 +1,5 @@
 from tetrisgame import TetrisGame
-from random import random
+from random import uniform
 import copy
 
 class Ai:
@@ -15,16 +15,18 @@ class Ai:
             "bumpinessMultiplier":5,
             "lineClearMultiplier":20,
             "blocksRightLaneMultiplier":10,
-            "averagePeakMultiplier":1
+            "averagePeakMultiplier":10,
+            "maximumLineHeightMultiplier":1
             }
         
     def randomizeMultipliers(self):
          self.multipliers={
-             "holeCountMultiplier": 100 * random(0, 2),
-             "bumpinessMultiplier":5 * random(0, 2),
-             "lineClearMultiplier":20 * random(0, 2),
-             "blocksRightLaneMultiplier":10 * random(0, 2),
-             "averagePeakMultiplier":1 * random(0, 2)
+             "holeCountMultiplier": 100 * uniform(0, 2),
+             "bumpinessMultiplier":5 * uniform(0, 2),
+             "lineClearMultiplier":20 * uniform(0, 2),
+             "blocksRightLaneMultiplier":10 * uniform(0, 2),
+             "averagePeakMultiplier":10 * uniform(0, 2),
+             "maximumLineHeightMultiplier":1* uniform(0, 2)
              }
     
     def calculateFitness(self):
@@ -41,22 +43,27 @@ class Ai:
             self.game.drop()   
         self.movementPlan.pop(0)
     
+    def placePieceInBoardAtPosition(self,board,piece,position):    
+        piece.x = position[0]
+        piece.y = position[1]
+        for i in range(position[2]):
+            piece.rotate()
+        if board.is_valid_move(piece.shape,piece.x, piece.y):
+            board.place_piece(piece)
+    
     def costOfMove(self,board,piece,position):
         boardCopy = copy.deepcopy(board)
         pieceCopy = copy.deepcopy(piece)
         
-        pieceCopy.x = position[0]
-        pieceCopy.y = position[1]
-        for i in range(position[2]):
-            pieceCopy.rotate()
-            
-        boardCopy.place_piece(pieceCopy)
+        self.placePieceInBoardAtPosition(boardCopy,pieceCopy,position)
+
         
         lineClear = boardCopy.clear_lines()
         holes = boardCopy.get_number_holes()
         bumpiness = boardCopy.get_bumpiness()
         blocksRightmostLane = boardCopy.count_blocks_in_rightmost_lane()
         averagePeaks = boardCopy.get_average_peaks()
+        maximumLineHeight = boardCopy.get_maximum_line_height()
         
         costLineClear=0
         if(lineClear!=4):
@@ -68,18 +75,36 @@ class Ai:
                 self.multipliers["bumpinessMultiplier"]*bumpiness +
                 costLineClear +
                 self.multipliers["blocksRightLaneMultiplier"]*blocksRightmostLane +
-                self.multipliers["averagePeakMultiplier"]*averagePeaks )
+                self.multipliers["averagePeakMultiplier"]*averagePeaks +
+                self.multipliers["maximumLineHeightMultiplier"]*maximumLineHeight
+                )
     
     def getBestMove(self):
-        positions = self.game.board.get_all_position(self.game.current_piece)
-        costPositions =[]
-        for i in range(len(positions)):
-            costPositions.append(self.costOfMove(self.game.board,self.game.current_piece,positions[i]))
-        indexMinCost = costPositions.index(min(costPositions))
-        return self.game.current_piece.get_path_to_position(positions[indexMinCost])
+        positionsCurrent = self.game.board.get_all_position(self.game.current_piece)
+        costPositions = []
+        BestPositionsNext = []
+        for i in range(len(positionsCurrent)):
+            costPositions.append(self.costOfMove(self.game.board,self.game.current_piece,positionsCurrent[i]))
+            
+            boardCopy = copy.deepcopy(self.game.board)
+            pieceCopy = copy.deepcopy(self.game.current_piece)
+            self.placePieceInBoardAtPosition(boardCopy,pieceCopy,positionsCurrent[i])
+            
+            positionsNext = boardCopy.get_all_position(self.game.next_piece)
+            costNext = []
+            for j in range(len(positionsNext)):
+               costNext.append(self.costOfMove(boardCopy,self.game.next_piece,positionsNext[j]))
+            
+            indexBestNextMove = costNext.index(min(costNext))
+            BestPositionsNext.append(positionsNext[indexBestNextMove])
+            costPositions[i]+=costNext[indexBestNextMove]
+        
+        indexBestMoves = costPositions.index(min(costPositions))
+        return self.game.current_piece.get_path_to_position(positionsCurrent[indexBestMoves])
     
     def addMoves(self,path):
-        self.movementPlan.append(path)
+        for i in range(len(path)):
+            self.movementPlan.append(path[i])
         
         
         

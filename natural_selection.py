@@ -1,8 +1,13 @@
 import math
+from ai import Ai
 
 class Population:
     def __init__(self,size):
         self.ai = []
+        for i in range(size):
+            newAi=Ai()
+            newAi.randomizeMultipliers()
+            self.ai.append(newAi)
         self.fitnessSum = 0;
         self.bestAi
         self.generation = 1;
@@ -10,4 +15,7 @@ class Population:
         self.batchSize = 16;
         self.currentBatchNumber = 0;
         self.numberOfBatches = math.ceil(size / self.batchSize);
+        
+    
+    
         
