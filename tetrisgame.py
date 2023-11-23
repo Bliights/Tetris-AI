@@ -188,46 +188,46 @@ class TetrisGame:
             self.gravity_timer = 0
 
     def update_level(self):
-        if self.totaLinesClear>=10:
+        if self.totaLinesClear<=10:
             self.level = 1
             self.gravity_speed = 43
-        elif self.totaLinesClear>=20:
+        elif self.totaLinesClear<=20:
             self.level = 2
             self.gravity_speed = 38
-        elif self.totaLinesClear>=30:
+        elif self.totaLinesClear<=30:
             self.level = 3
             self.gravity_speed = 33
-        elif self.totaLinesClear>=40:
+        elif self.totaLinesClear<=40:
             self.level = 4
             self.gravity_speed = 28
-        elif self.totaLinesClear>=50:
+        elif self.totaLinesClear<=50:
             self.level = 5
             self.gravity_speed = 23
-        elif self.totaLinesClear>=60:
+        elif self.totaLinesClear<=60:
             self.level = 6
             self.gravity_speed = 18
-        elif self.totaLinesClear>=70:
+        elif self.totaLinesClear<=70:
             self.level = 7
             self.gravity_speed = 13
-        elif self.totaLinesClear>=80:
+        elif self.totaLinesClear<=80:
             self.level = 8
             self.gravity_speed = 8
-        elif self.totaLinesClear>=90:
+        elif self.totaLinesClear<=90:
             self.level = 9
             self.gravity_speed = 6
-        elif self.totaLinesClear>=100:
+        elif self.totaLinesClear<=100:
             self.level = 10
             self.gravity_speed = 5
-        elif self.totaLinesClear>=110:
+        elif self.totaLinesClear<=110:
             self.level = 11
             self.gravity_speed = 4
-        elif self.totaLinesClear>=120:
+        elif self.totaLinesClear<=120:
             self.level = 12
             self.gravity_speed = 3
-        elif self.totaLinesClear>=130:
+        elif self.totaLinesClear<=130:
             self.level = 13
             self.gravity_speed = 2
-        elif self.totaLinesClear>=140:
+        elif self.totaLinesClear<=140:
             self.level = 14
             self.gravity_speed = 1
             
@@ -247,7 +247,7 @@ class TetrisGame:
 
             for i in range(len(lines)):
                 if 'maxscore' in lines[i]:
-                    lines[i] = 'maxscore = ' + str(self.score)
+                    lines[i] = 'maxscore = ' + str(self.score) +"\n"
 
             with open('constants.py', 'w') as file:
                 file.writelines(lines)
@@ -290,7 +290,7 @@ class TetrisGame:
         self.next_piece = Piece()
         self.score = 0
         self.level = 0
-        self.linesClear = 0
+        self.totaLinesClear = 0
         self.gravity_timer = 0
         self.gravity_speed = 48
         self.status.reset()

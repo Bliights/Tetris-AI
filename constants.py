@@ -3,7 +3,9 @@ gridHeight = 20
 cellSize = 20
 
 fps = 60
-maxscore = 23420
+maxscore = 67620
+
+
 shapes = [
     [[1, 1, 1, 1]],
     [[1, 1], [1, 1]],
