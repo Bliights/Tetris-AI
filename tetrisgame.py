@@ -143,6 +143,7 @@ class TetrisGame:
         self.current_piece.y)):
             self.status.set_game_over()
             self.update_score_max()
+            print("dead")
             self.display_elements["Game_over_scoreText"].text = "Your score : "+ str(self.score)
     
     def move_piece_down(self):

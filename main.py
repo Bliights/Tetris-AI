@@ -15,7 +15,6 @@ display.fill(colors["white"])
 game = TetrisGame(display) 
 ai = Ai(display)
 ai.fixMultiplier()
-ai.game.status.set_solo()
 game.clock.tick()
 running = True
 
@@ -132,12 +131,10 @@ while running:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     # Restart button
                     if ai.game.display_elements["Game_over_resetButton"].mouse_in_element():
-                        ai.game.reset()
-                        ai.game.status.set_solo()
+                        ai.reset()
                     # Menu button
                     elif ai.game.display_elements["Game_over_homeButton"].mouse_in_element():
-                        ai.game.reset()
-                        ai.game.status.set_solo()
+                        ai.reset()
                         game.status.set_home()
                     # Exit button
                     elif ai.game.display_elements["Game_over_exitButton"].mouse_in_element():

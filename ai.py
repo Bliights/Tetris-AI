@@ -1,13 +1,15 @@
 from tetrisgame import TetrisGame
-from random import uniform
+from random import random,uniform
 import copy
 
 class Ai:
     def __init__(self,screen):
         self.game=TetrisGame(screen)
+        self.game.status.set_solo()
         self.multipliers = {}
         self.fitness = 0
         self.movementPlan=[]
+        self.screen = screen
         
     def fixMultiplier(self):
         self.multipliers={
@@ -105,7 +107,19 @@ class Ai:
     def addMoves(self,path):
         for i in range(len(path)):
             self.movementPlan.append(path[i])
-        
-        
-        
+    
+    def mutate(self,mutationRate):
+        for key, value in self.multipliers.items():
+            if random() < mutationRate:
+                self.multipliers[key] = value * uniform(0.95, 1.05)
+    
+    def clone(self):
+        clone = Ai(self.screen)       
+        clone.multipliers = self.multipliers
+        return clone
+
+    def reset(self):
+        self.game.reset()
+        self.game.status.set_solo()
+        self.movementPlan=[]
         
