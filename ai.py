@@ -23,12 +23,12 @@ class Ai:
         
     def randomizeMultipliers(self):
          self.multipliers={
-             "holeCountMultiplier": 100 * uniform(0, 2),
-             "bumpinessMultiplier":5 * uniform(0, 2),
-             "lineClearMultiplier":20 * uniform(0, 2),
-             "blocksRightLaneMultiplier":10 * uniform(0, 2),
-             "averagePeakMultiplier":10 * uniform(0, 2),
-             "maximumLineHeightMultiplier":1* uniform(0, 2)
+             "holeCountMultiplier": uniform(0, 100),
+             "bumpinessMultiplier": uniform(0,100),
+             "lineClearMultiplier": uniform(0, 100),
+             "blocksRightLaneMultiplier": uniform(0, 100),
+             "averagePeakMultiplier": uniform(0, 100),
+             "maximumLineHeightMultiplier": uniform(0, 100)
              }
     
     def calculateFitness(self):

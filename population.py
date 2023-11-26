@@ -1,5 +1,5 @@
 from ai import Ai
-from random import randint,random,choice
+from random import randint,random,choice,getrandbits
 
 class Population:
     def __init__(self,
@@ -30,20 +30,12 @@ class Population:
         self.bestAi = Ai(screen)
         self.maxlineClear = 0
         
-    def update(self):
-        for i in range(self.populationSize):
-            if self.aiPopulation[i].game.status.is_solo() and self.aiPopulation[i].game.totaLinesClear<5000:
-                if(len(self.aiPopulation[i].movementPlan)==0):
-                    self.aiPopulation[i].addMoves(self.aiPopulation[i].getBestMove())
-                self.aiPopulation[i].nextMove()
-                self.aiPopulation[i].game.update_gravity()
-        
-    def isGenerationFinish(self):
-        finish = True
-        for i in range(self.populationSize):
-            if self.aiPopulation[i].game.status.is_solo() and self.aiPopulation[i].game.totaLinesClear<5000:
-                finish = False
-        return finish
+    def update(self,i):
+        while self.aiPopulation[i].game.status.is_solo() and self.aiPopulation[i].game.totaLinesClear<1000:
+            if(len(self.aiPopulation[i].movementPlan)==0):
+                self.aiPopulation[i].addMoves(self.aiPopulation[i].getBestMove())
+            self.aiPopulation[i].nextMove()
+            self.aiPopulation[i].game.update_gravity()
     
     def calculateAiFitnesses(self): 
         for i in range(self.populationSize): 
@@ -51,8 +43,7 @@ class Population:
     
     def populationSortedByFitness(self):
         self.aiPopulation = sorted(self.aiPopulation, key=lambda x: x.fitness, reverse=True)
-        
-    
+          
     def setBestAi(self):
         self.bestAi = self.aiPopulation[0];
         for i in range(self.populationSize): 
@@ -77,7 +68,7 @@ class Population:
         children = father.clone()
         children.reset()
         for key, value in father.multipliers.items():
-            children.multipliers[key]=(father.multipliers[key]+mother.multipliers[key])/2
+            children.multipliers[key]=father.multipliers[key] if getrandbits(1) else mother.multipliers[key]
         return children
             
     def naturalSelection(self):
