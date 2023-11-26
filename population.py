@@ -28,10 +28,11 @@ class Population:
         self.gradedIndividualCount = (int)(self.populationSize*self.gradedRetainPercent)
         
         self.bestAi = Ai(screen)
+        self.maxlineClear = 0
         
     def update(self):
         for i in range(self.populationSize):
-            if self.aiPopulation[i].game.status.is_solo() and self.aiPopulation[i].game.totaLinesClear<200:
+            if self.aiPopulation[i].game.status.is_solo() and self.aiPopulation[i].game.totaLinesClear<5000:
                 if(len(self.aiPopulation[i].movementPlan)==0):
                     self.aiPopulation[i].addMoves(self.aiPopulation[i].getBestMove())
                 self.aiPopulation[i].nextMove()
@@ -40,7 +41,7 @@ class Population:
     def isGenerationFinish(self):
         finish = True
         for i in range(self.populationSize):
-            if self.aiPopulation[i].game.status.is_solo() and self.aiPopulation[i].game.totaLinesClear<200:
+            if self.aiPopulation[i].game.status.is_solo() and self.aiPopulation[i].game.totaLinesClear<5000:
                 finish = False
         return finish
     
@@ -83,6 +84,7 @@ class Population:
         self.calculateAiFitnesses()
         self.populationSortedByFitness()
         self.setBestAi()
+        self.maxlineClear=self.bestAi.game.totaLinesClear
         
         self.createParents()
         self.populationMutation()

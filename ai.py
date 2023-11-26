@@ -13,12 +13,12 @@ class Ai:
         
     def fixMultiplier(self):
         self.multipliers={
-            "holeCountMultiplier": 100,
-            "bumpinessMultiplier":5,
-            "lineClearMultiplier":20,
-            "blocksRightLaneMultiplier":10,
-            "averagePeakMultiplier":10,
-            "maximumLineHeightMultiplier":1
+            "holeCountMultiplier": 174.21379409037795,
+            "bumpinessMultiplier":3.9660164594029785,
+            "lineClearMultiplier":12.887340883363617,
+            "blocksRightLaneMultiplier":15.465352185541922,
+            "averagePeakMultiplier":11.626006399955168,
+            "maximumLineHeightMultiplier":1.3066395660103318
             }
         
     def randomizeMultipliers(self):
@@ -121,5 +121,6 @@ class Ai:
     def reset(self):
         self.game.reset()
         self.game.status.set_solo()
+        self.fitness = 0
         self.movementPlan=[]
         

@@ -17,11 +17,11 @@ gradedRetainPercent = 0.2
 chanceRetainNongraded = 0.05
 population = Population(populationSize,maxGeneration,chanceToMutate,gradedRetainPercent,chanceRetainNongraded,display)
 
-while population.generation<population.maxGeneration and population.bestAi.game.totaLinesClear<200:
+while population.generation<population.maxGeneration and population.maxlineClear<5000:
     while population.isGenerationFinish()==False:
         population.update()
     population.naturalSelection()
-    print(f'Best score : {population.bestAi.fitness} ({population.generation} generation)')
+    print(f'Max Lines clear : {population.maxlineClear} ({population.generation} generation)')
 
 print(f"Solution found at generation n {population.generation}")
 print(population.bestAi.multipliers)
