@@ -31,12 +31,13 @@ class Population:
         self.maxlineClear = 0
         
     def update(self,i):
-        while self.aiPopulation[i].game.status.is_solo() and self.aiPopulation[i].game.totaLinesClear<1000:
+        while self.aiPopulation[i].game.status.is_solo() and self.aiPopulation[i].game.totaLinesClear<10000:
             if(len(self.aiPopulation[i].movementPlan)==0):
                 self.aiPopulation[i].addMoves(self.aiPopulation[i].getBestMove())
             self.aiPopulation[i].nextMove()
             self.aiPopulation[i].game.update_gravity()
-    
+        print(i)
+            
     def calculateAiFitnesses(self): 
         for i in range(self.populationSize): 
             self.aiPopulation[i].calculateFitness()

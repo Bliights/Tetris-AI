@@ -13,12 +13,12 @@ class Ai:
         
     def fixMultiplier(self):
         self.multipliers={
-            "holeCountMultiplier": 174.21379409037795,
-            "bumpinessMultiplier":3.9660164594029785,
-            "lineClearMultiplier":12.887340883363617,
-            "blocksRightLaneMultiplier":15.465352185541922,
-            "averagePeakMultiplier":11.626006399955168,
-            "maximumLineHeightMultiplier":1.3066395660103318
+            "holeCountMultiplier": 70.36429053695697,
+            "bumpinessMultiplier":37.73546367656465,
+            "lineClearMultiplier":4.952631116903594,
+            "blocksRightLaneMultiplier":53.66749731564597,
+            "averagePeakMultiplier":49.23906630306003,
+            "maximumLineHeightMultiplier":0.17007162860407377
             }
         
     def randomizeMultipliers(self):
@@ -32,7 +32,10 @@ class Ai:
              }
     
     def calculateFitness(self):
-        self.fitness = self.game.score
+        if self.game.totaLinesClear!=0:
+            self.fitness = self.game.score/self.game.totaLinesClear
+        else:
+            self.fitness = 0
     
     def nextMove(self):
         if(self.movementPlan[0]=="right"):

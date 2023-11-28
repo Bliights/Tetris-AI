@@ -3,7 +3,7 @@ gridHeight = 20
 cellSize = 20
 
 fps = 60
-maxscore = 538020
+maxscore = 2316200
 
 
 shapes = [

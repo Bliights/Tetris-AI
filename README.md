@@ -17,10 +17,7 @@ The second component of the project is equally fascinating, involving the develo
 ## To do
 
 1. Priority
-   - Finish the genetic algorithm for the AI
-   - Update the UML
-2. If time
-   - improve Design
+   - Continue training
 
 ## Contributors
 
