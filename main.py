@@ -24,7 +24,7 @@ while running:
         game.draw_home_menu(display)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
+                running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 
                 # solo mode
@@ -37,14 +37,14 @@ while running:
                     game.status.set_ai()
                 # Exit button
                 elif game.display_elements["Home_exitButton"].mouse_in_element():
-                    pygame.quit()
+                    running = False
                     
     elif game.status.is_solo():
         display.fill(colors["white"])
         game.draw_solo_game(display)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
+                running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     game.status.move_left = True
@@ -94,7 +94,7 @@ while running:
         game.draw_game_over(display)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
+                running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Restart button
                 if game.display_elements["Game_over_resetButton"].mouse_in_element():
@@ -106,7 +106,7 @@ while running:
                     game.status.set_home()
                 # Exit button
                 elif game.display_elements["Game_over_exitButton"].mouse_in_element():
-                    pygame.quit()
+                    running = False
                     
     elif game.status.is_ai():
         if ai.game.status.is_solo():
@@ -127,7 +127,7 @@ while running:
             ai.game.draw_game_over(display)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
+                    running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     # Restart button
                     if ai.game.display_elements["Game_over_resetButton"].mouse_in_element():
@@ -138,6 +138,8 @@ while running:
                         game.status.set_home()
                     # Exit button
                     elif ai.game.display_elements["Game_over_exitButton"].mouse_in_element():
-                        pygame.quit()
+                        running = False
         
     pygame.display.update()
+
+pygame.quit()

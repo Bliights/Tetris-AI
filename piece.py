@@ -44,7 +44,7 @@ class Piece:
         path.append("drop")
         return path
     
-    # Draw the piece at the (x,y) coordinate (top left corner of the piece)
+    # Draw the piece at the (x+piece.x,y+piece.y) coordinate (top left corner of the piece)
     def draw_piece(self, screen, x, y):
         for i in range(len(self.shape)):
             for j in range(len(self.shape[0])):

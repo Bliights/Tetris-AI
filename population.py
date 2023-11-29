@@ -1,5 +1,5 @@
 from ai import Ai
-from random import randint,random,choice,getrandbits
+from random import random,choice,getrandbits
 
 class Population:
     def __init__(self,
