@@ -1,22 +1,21 @@
 # Triste
-# Table of Contents
-1. [Introduction](#1-introduction)
-2. [Creation of Tetris](#2-creation-of-tetris)
-   1. [Definition of Constants](#21-definition-of-constants-constantspy)
-   2. [Creation of the Piece](#22-creation-of-the-piece-piecepy)
-   3. [Creation of the Board](#23-creation-of-the-board-boardpy)
-   4. [Creation of the Clock](#24-creation-of-the-clock-clockpy)
-   5. [Creation of the Status](#25-creation-of-the-status-statuspy)
-   6. [Creation of the Display Element](#26-creation-of-the-display-element-displaypy)
-   7. [Creation of the Game Tetris](#27-creation-of-the-game-tetrisgamepy)
-   8. [Execution of the Game](#28-execution-of-the-game-mainpy)
-3. [Creation of the AI](#3-creation-of-the-ai)
-4. [Training](#4-training)
-   1. [Creating a Population](#41-creating-a-population)
-   2. [Where the Training Unfolds](#42-where-the-training-unfolds)
-5. [How to Run](#5-how-to-run)
-6. [Contributors](#6-contributors)
-
+## Table of Contents
+1. [Introduction](#introdution)
+2. [Creation of Tetris](#creation-of-tetris)
+   1. [Definition of constants](#definition-of-constants-constantspy)
+   2. [Creation of the piece](#creation-of-the-piece-piecepy)
+   3. [Creation of the board](#creation-of-the-board-boardpy)
+   4. [Creation of the clock](#creation-of-the-clock-clockpy)
+   5. [Creation of the status](#creation-of-the-status-statuspy)
+   6. [Creation of the display element](#creation-of-the-display-element-displaypy)
+   7. [Creation of the game tetris](#creation-of-the-game-tetrisgamepy)
+   8. [Execution of the game](#execution-of-the-game-mainpy)
+3. [Creation of the ai](#creation-of-the-ai)
+4. [Traning](#training)
+   1. [Creating a population](#creating-a-population)
+   2. [Where the training unfolds](#where-the-training-unfolds)
+5. [How to run](#how-to-run)
+6. [Contributors](#contributors)
 
 ### Introdution
 ***
