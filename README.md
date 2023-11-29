@@ -2,14 +2,14 @@
 ## Table of Contents
 1. [Introduction](#introdution)
 2. [Creation of Tetris](#creation-of-tetris)
-   1. [Definition of constants](#definition-of-constants-constantspy)
-   2. [Creation of the piece](#creation-of-the-piece-piecepy)
-   3. [Creation of the board](#creation-of-the-board-boardpy)
-   4. [Creation of the clock](#creation-of-the-clock-clockpy)
-   5. [Creation of the status](#creation-of-the-status-statuspy)
-   6. [Creation of the display element](#creation-of-the-display-element-displaypy)
-   7. [Creation of the game tetris](#creation-of-the-game-tetrisgamepy)
-   8. [Execution of the game](#execution-of-the-game-mainpy)
+   1. [Definition of Constants](#definition-of-constants-constantspy)
+   2. [Creation of the Piece](#creation-of-the-piece-piecepy)
+   3. [Creation of the Board](#creation-of-the-board-boardpy)
+   4. [Creation of the Clock](#creation-of-the-clock-clockpy)
+   5. [Creation of the Status](#creation-of-the-status-statuspy)
+   6. [Creation of the Display Element](#creation-of-the-display-element-displaypy)
+   7. [Creation of the Game](#creation-of-the-game-tetrisgamepy)
+   8. [Execution of the Game](#execution-of-the-game-mainpy)
 3. [Creation of the ai](#creation-of-the-ai)
 4. [Traning](#training)
    1. [Creating a population](#creating-a-population)
@@ -17,7 +17,7 @@
 5. [How to run](#how-to-run)
 6. [Contributors](#contributors)
 
-### Introdution
+### 1. Introdution
 ***
 This project proposal aims to delve deeply into the game Tetris, focusing on two essential aspects. Firstly, it involves faithfully recreating the game Tetris and conducting an in-depth analysis of its functioning, design, and history. Secondly, this project seeks to develop an Artificial Intelligence (AI) capable of mastering Tetris to the extent of never losing.
 
@@ -25,11 +25,11 @@ The first part of the project entails a meticulous analysis of Tetris, breaking 
 
 The second component of the project is equally fascinating, involving the development of an Artificial Intelligence (AI) system that can achieve exceptional mastery of Tetris, avoiding losses altogether. By creating an AI capable of surpassing human-like strategic thinking and adaptability within the Tetris environment, we aim to push the boundaries of AI capabilities and explore potential applications of this technology in the realms of gaming, problem-solving, and AI research.
 
-### Creation of Tetris
+### 2. Creation of Tetris
 ***
 Firstly, we recreated Tetris. To achieve this, we decided to use the Pygame library for display and opted for object-oriented programming for all aspects of game management.
 
-#### Definition of Constants (constants.py)
+#### i. Definition of Constants (constants.py)
 ***
 To kick off this project, we began by defining the game's constants. These include the dimensions of the grid, cell size, frames per second (fps), max score (for saving), the different shapes of the pieces, colors associated with each shape, and all the colors necessary for display.
 
@@ -74,7 +74,7 @@ colors = {"black": (0, 0, 0),
           }
 ```
 
-#### Creation of the Piece (piece.py)
+#### ii. Creation of the Piece (piece.py)
 ***
 Next, we created the class responsible for the game pieces. To achieve this, we generated a random number using the random library to randomly select a shape from our pre-defined list of shapes (defined in the constants.py file). This allowed us to assign a shape and color to our piece.
 
@@ -178,7 +178,7 @@ Finally, for displaying the piece, we created two methods. One method displays i
                     )
 ```
 
-#### Creation of the Board (board.py)
+#### iii. Creation of the Board (board.py)
 ***
 To create the board, we initialized a list that corresponds to our grid. The value of 0 corresponds to an empty space, and the value of 1 corresponds to a block. We also initialized another grid responsible solely for storing the colors.
 ```python
@@ -376,7 +376,7 @@ Finally, we created a method to display the board at coordinates (x, y) with coo
         self.color = [[self.backgroud_color] * gridWidth for _ in range(gridHeight)]
 
 ```
-#### Creation of the Clock (clock.py)
+#### iv. Creation of the Clock (clock.py)
 ***
 The clock that we used is the clock integrated into the Pygame library, and our class allows limiting the execution to a certain number of FPS using the tick function.
 ```python
@@ -391,7 +391,7 @@ class Clock:
     def tick(self):
         return self.clock.tick(self.fps)
 ```
-#### Creation of the Status (status.py)
+#### v. Creation of the Status (status.py)
 ***
 The Status class is used to define the game status and manage the movement of the pieces. This function allows for easy modification and better organization.
 
@@ -453,7 +453,7 @@ class Status:
         self.drop_limiter = True
 ```
 
-#### Creation of the Display Element (display.py)
+#### vi. Creation of the Display Element (display.py)
 ***
 This class allows creating display elements on a screen created by the Pygame library. With it, you can create buttons or simply textual display. Buttons are very useful as they allow clear management of mouse movement detection by the user, and with the `mouse_in_element` function, it's easy to determine if the user has clicked on the button.
 ```python
@@ -516,7 +516,7 @@ class Display_Element:
         screen.blit(text_to_draw, text_rect)
 ```
 
-#### Creation of the Game (tetrisgame.py)
+#### vii. Creation of the Game (tetrisgame.py)
 ***
 The initialization of a game instance includes the current piece, the next piece, the board, the clock, the level, the score, the total number of cleared lines, the gravity speed, the gravity timer, the status, and various display elements.
 ```python
@@ -826,7 +826,7 @@ def draw_home_menu(self,screen):
         self.display_elements["Game_over_scoreText"].text = str(self.score)
      
 ```
-#### Execution of the Game (main.py)
+#### viii. Execution of the Game (main.py)
 ***
 To run the game, we initialized a game window and the game itself. Then, we looped through actions to be performed based on different statuses within a while loop.
 
@@ -978,7 +978,7 @@ while running:
 pygame.quit()
 ```
 
-### Creation of the AI
+### 3. Creation of the AI
 ***
 To develop an AI that plays Tetris, we opted to create a function responsible for estimating the cost of each potential move. To achieve this, we selected various parameters that we deemed relevant for our AI. These parameters include the number of holes, bumpiness, the number of lines cleared by the move, the number of blocks in the rightmost column, the average peak, and the maximum line height. Once these parameters were defined, we created a method that randomly selects a number between 0 and 100 for each multiplier.
 Furthermore, we equipped our AI with its own Tetris game instance and a list to store all its future movements.
@@ -1134,9 +1134,9 @@ def addMoves(self, path):
         self.fitness = 0
         self.movementPlan = []
 ```
-### Training 
+### 4. Training 
 ***
-#### Creating a Population
+#### i. Creating a Population
 ***
 To create a population, we need several parameters, including its size, the maximum number of generations, the mutation chances, the percentage of the best to retain, and the chance to retain poor AIs. Each population comprises a list of AIs.
 ```python
@@ -1238,7 +1238,7 @@ def createParents(self):
         self.aiPopulation.extend(children)
         self.generation+=1
 ```
-#### Where the Training Unfolds
+#### ii. Where the Training Unfolds
 ***
 This is where the training takes place. If you also want to train the AI, you simply need to execute the `training.py` file and wait until the AI that meets your criteria is found. This training involves simultaneously running all AIs using multithreading (it's not true parallelism, but it allows for updating almost all AIs at the same time, saving a considerable amount of time). We chose not to use multiprocessing, as it proved less efficient than multithreading in our tests. Multiprocessing allowed only 16 games to be executed simultaneously on our computers, resulting in longer waiting times for a large population.
 
@@ -1282,7 +1282,7 @@ end_time = time.time()
 execution_time = end_time - start_time
 print(f"Temps d'exécution : {execution_time/60} minutes")
 ```
-### How to run
+### 5. How to run
 ***
 1. Install a python distribution on your computer
    [python.org](https://www.python.org/)
@@ -1293,7 +1293,7 @@ print(f"Temps d'exécution : {execution_time/60} minutes")
 3. Run the main file to play the game
    `python main.py`
 
-### Contributors
+### 6. Contributors
 ***
 |            Name            |      College      |    Department    |                   Email                   |
 | :------------------------: | :---------------: | :--------------: | :---------------------------------------: |
