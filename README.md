@@ -33,6 +33,9 @@ Firstly, we recreated Tetris. To achieve this, we decided to use the Pygame libr
 ***
 To kick off this project, we began by defining the game's constants. These include the dimensions of the grid, cell size, frames per second (fps), max score (for saving), the different shapes of the pieces, colors associated with each shape, and all the colors necessary for display.
 
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 gridWidth = 10
 gridHeight = 20
@@ -73,12 +76,16 @@ colors = {"black": (0, 0, 0),
           "orange": (255, 200, 46)
           }
 ```
+</details>
 
 #### ii. Creation of the Piece (piece.py)
 ***
 Next, we created the class responsible for the game pieces. To achieve this, we generated a random number using the random library to randomly select a shape from our pre-defined list of shapes (defined in the constants.py file). This allowed us to assign a shape and color to our piece.
 
 We then assigned the initial coordinates for when the pieces are first generated. These initial coordinates include a y-axis coordinate of 0 (considering an inverted y-axis) and an x-coordinate of grid size/2 - piece width/2, which gives us the top-left coordinate of the piece.
+
+<details>
+<summary>Show Code Preview</summary>
 
 ```python
 import pygame
@@ -95,7 +102,13 @@ class Piece:
             
             self.color = color_per_shape[random]
 ```
+</details>
+
 Then, we created all the movements that our piece can perform, including right, left, down, and rotation.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 # Move the piece one square to the left
     def move_left(self):
@@ -113,7 +126,13 @@ Then, we created all the movements that our piece can perform, including right, 
     def rotate(self):
         self.shape = list(map(list, zip(*reversed(self.shape))))
 ```
+</details>
+
 We also created a function that generates a list of strings containing instructions to move a piece to a specific position with a certain number of rotations. This method will be useful later for implementing the AI.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 def get_path_to_position(self,position):
         horizontal_mvt = position[0]-self.x
@@ -129,7 +148,13 @@ def get_path_to_position(self,position):
         path.append("drop")
         return path
 ```
+</details>
+
 Finally, for displaying the piece, we created two methods. One method displays it on a screen at the coordinate x + piece.x, y + piece.y, and the second method displays its shadow on the grid at the same coordinates, except for the y-coordinate where we add the distance to reach the bottom of the grid.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 # Draw the piece at the (x+piece.x,y+piece.y) coordinate (top left corner of the piece)
     def draw_piece(self, screen, x, y):
@@ -177,10 +202,15 @@ Finally, for displaying the piece, we created two methods. One method displays i
                         1
                     )
 ```
+</details>
 
 #### iii. Creation of the Board (board.py)
 ***
 To create the board, we initialized a list that corresponds to our grid. The value of 0 corresponds to an empty space, and the value of 1 corresponds to a block. We also initialized another grid responsible solely for storing the colors.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 import pygame
 from constants import gridHeight, gridWidth, colors, cellSize
@@ -194,7 +224,12 @@ class Board:
         self.color = [[self.backgroud_color] * gridWidth for _ in range(gridHeight)]
 
 ```
+</details>
+
 Next, we created a method to test if moving a shape to a new position was possible. (Note: we didn't use "piece" instead of "shape" for practical reasons related to rotation.)
+
+<details>
+<summary>Show Code Preview</summary>
 
 ```python
 # Test if the movement of the piece is correct
@@ -209,11 +244,17 @@ Next, we created a method to test if moving a shape to a new position was possib
                     return False
         return True
 ```
+</details>
+
 To handle game management, we created several methods:
 
 - One method to permanently place a shape on the board (useful when the shape can no longer move),
 - One method to check if there are lines that need to be cleared and, if so, to clear them and return the number of cleared lines,
 - One method to obtain the maximum position along the y-axis in its current state.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 # Place the piece in the board
     def place_piece(self, piece):
@@ -243,6 +284,8 @@ To handle game management, we created several methods:
             i+=1
         return i-1
 ```
+</details>
+
 Furthermore, we also created several methods to retrieve important information that will be useful in the creation of the AI:
 
 - One method returning the average height of the columns.
@@ -250,6 +293,10 @@ Furthermore, we also created several methods to retrieve important information t
 - One method returning the number of holes in the grid structure.
 - One method returning the number of blocks in the rightmost column (column used for Tetris, cleared with the line).
 - One method returning the maximum height of the grid.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 # Get the pick on the board
     def get_average_peaks(self):
@@ -303,7 +350,13 @@ Furthermore, we also created several methods to retrieve important information t
                     maxHeight=gridHeight-i
         return maxHeight
 ```
+</details>
+
 We also created a method allowing us to obtain, for a shape, all the future positions it can have in the grid (T-spins are not included, nor are slow drops to move the shape at the last moment).
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 # Get all the position possible for a piece in the board   
     def get_all_position(self,pieceGiven):
@@ -343,7 +396,13 @@ We also created a method allowing us to obtain, for a shape, all the future posi
                         positions.append((i,j-1,r))        
         return positions
 ```
+</details>
+
 Finally, we created a method to display the board at coordinates (x, y) with coordinates at the top left of the board. Additionally, we created a method to completely reset all elements of this class.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 # Draw the board at the (x,y) coordinate (top left corner of the board)
     def draw_board(self, screen, x, y):
@@ -376,9 +435,15 @@ Finally, we created a method to display the board at coordinates (x, y) with coo
         self.color = [[self.backgroud_color] * gridWidth for _ in range(gridHeight)]
 
 ```
+</details>
+
 #### iv. Creation of the Clock (clock.py)
 ***
 The clock that we used is the clock integrated into the Pygame library, and our class allows limiting the execution to a certain number of FPS using the tick function.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 import pygame
 from constants import fps
@@ -391,9 +456,14 @@ class Clock:
     def tick(self):
         return self.clock.tick(self.fps)
 ```
+</details>
+
 #### v. Creation of the Status (status.py)
 ***
 The Status class is used to define the game status and manage the movement of the pieces. This function allows for easy modification and better organization.
+
+<details>
+<summary>Show Code Preview</summary>
 
 ```python
 class Status:
@@ -452,10 +522,15 @@ class Status:
         self.rotate_limiter = True
         self.drop_limiter = True
 ```
+</details>
 
 #### vi. Creation of the Display Element (display.py)
 ***
 This class allows creating display elements on a screen created by the Pygame library. With it, you can create buttons or simply textual display. Buttons are very useful as they allow clear management of mouse movement detection by the user, and with the `mouse_in_element` function, it's easy to determine if the user has clicked on the button.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 import pygame
 from constants import colors
@@ -515,10 +590,15 @@ class Display_Element:
         text_rect = text_to_draw.get_rect(center=(self.x,self.y))
         screen.blit(text_to_draw, text_rect)
 ```
+</details>
 
 #### vii. Creation of the Game (tetrisgame.py)
 ***
 The initialization of a game instance includes the current piece, the next piece, the board, the clock, the level, the score, the total number of cleared lines, the gravity speed, the gravity timer, the status, and various display elements.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 from constants import gridWidth, gridHeight, cellSize, maxscore
 from board import Board
@@ -639,7 +719,13 @@ class TetrisGame:
                                                     ),
             }
 ```
+</details>
+
 Then, we created all the necessary functions for the movement of the pieces while checking that the movements were allowed. We also defined a function to determine if the game is over.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 def move_piece_left(self):
         if self.board.is_valid_move(self.current_piece.shape, 
@@ -705,7 +791,13 @@ def move_piece_left(self):
             is_drop=True
         return is_drop
 ```
+</details>
+
 Next, we created functions responsible for gravity, level, score, and modification of the maximum score in the constants file.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 def update_gravity(self):
         self.gravity_timer += 1
@@ -778,7 +870,13 @@ def update_gravity(self):
             with open('constants.py', 'w') as file:
                 file.writelines(lines)
 ```
+</details>
+
 Finally, we defined all the necessary functions to display the different menus and to reset the game.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 def draw_home_menu(self,screen):
         self.display_elements["Home_menuText"].draw(screen)
@@ -826,9 +924,14 @@ def draw_home_menu(self,screen):
         self.display_elements["Game_over_scoreText"].text = str(self.score)
      
 ```
+</details>
+
 #### viii. Execution of the Game (main.py)
 ***
 To run the game, we initialized a game window and the game itself. Then, we looped through actions to be performed based on different statuses within a while loop.
+
+<details>
+<summary>Show Code Preview</summary>
 
 ```python
 import pygame
@@ -977,11 +1080,16 @@ while running:
 
 pygame.quit()
 ```
+</details>
 
 ### 3. Creation of the AI
 ***
 To develop an AI that plays Tetris, we opted to create a function responsible for estimating the cost of each potential move. To achieve this, we selected various parameters that we deemed relevant for our AI. These parameters include the number of holes, bumpiness, the number of lines cleared by the move, the number of blocks in the rightmost column, the average peak, and the maximum line height. Once these parameters were defined, we created a method that randomly selects a number between 0 and 100 for each multiplier.
 Furthermore, we equipped our AI with its own Tetris game instance and a list to store all its future movements.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 class Ai:
     def __init__(self, screen):
@@ -1024,7 +1132,13 @@ class Ai:
             "maximumLineHeightMultiplier": uniform(0, 100),
         }
 ```
+</details>
+
 We then created a function to calculate the player's fitness, enabling us to compare different players based on their game results. Following that, we developed a function to execute the next move and remove it from the list of pending moves. Additionally, we designed a function to place a piece on a board at a specific position.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 def calculateFitness(self):
         if self.game.totaLinesClear != 0:
@@ -1051,7 +1165,13 @@ def calculateFitness(self):
         if board.is_valid_move(piece.shape, piece.x, piece.y):
             board.place_piece(piece)
 ```
+</details>
+
 To further the process, we defined the method that calculates the cost of a move for a certain piece on a given board. With this function, we were able to create the function that determines the best move. The latter generates all possible combinations of boards based on the active piece and the next piece. It calculates the cost of each move to determine the best possible combination.With this, we can determine where the current piece should go, and we repeat the process for the next piece.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 def costOfMove(self, board, piece, position):
         boardCopy = copy.deepcopy(board)
@@ -1112,7 +1232,13 @@ def costOfMove(self, board, piece, position):
             positionsCurrent[indexBestMoves]
         )
 ```
+</details>
+
 Finally, we created a method for adding a move to the list of pending moves, along with a method to make our AI move (useful during training) and to clone or reset it.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 def addMoves(self, path):
         for i in range(len(path)):
@@ -1134,11 +1260,17 @@ def addMoves(self, path):
         self.fitness = 0
         self.movementPlan = []
 ```
+</details>
+
 ### 4. Training 
 ***
 #### i. Creating a Population
 ***
 To create a population, we need several parameters, including its size, the maximum number of generations, the mutation chances, the percentage of the best to retain, and the chance to retain poor AIs. Each population comprises a list of AIs.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 from ai import Ai
 from random import random,choice,getrandbits
@@ -1172,7 +1304,13 @@ class Population:
         self.bestAi = Ai(screen)
         self.maxlineClear = 0
 ```
+</details>
+
 Next, we created the functions necessary for training: updating the AI, calculating the overall fitness for all AIs, sorting the population based on fitness, and selecting the best AI in the generation.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 def update(self,i):
         while self.aiPopulation[i].game.status.is_solo() and self.aiPopulation[i].game.totaLinesClear<10000:
@@ -1195,7 +1333,13 @@ def update(self,i):
             if (self.aiPopulation[i].fitness>self.bestAi.fitness):
                 self.bestAi=self.aiPopulation[i]
 ```
+</details>
+
 To conclude the training, we defined the method for keeping the AIs (the parents) and creating offspring to complete the population. Additionally, we also created the methods to potentially mutate the population and the function responsible for the entire natural selection process.
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 def createParents(self):
         parents = self.aiPopulation[:self.gradedIndividualCount]
@@ -1238,11 +1382,17 @@ def createParents(self):
         self.aiPopulation.extend(children)
         self.generation+=1
 ```
+</details>
+
 #### ii. Where the Training Unfolds
 ***
 This is where the training takes place. If you also want to train the AI, you simply need to execute the `training.py` file and wait until the AI that meets your criteria is found. This training involves simultaneously running all AIs using multithreading (it's not true parallelism, but it allows for updating almost all AIs at the same time, saving a considerable amount of time). We chose not to use multiprocessing, as it proved less efficient than multithreading in our tests. Multiprocessing allowed only 16 games to be executed simultaneously on our computers, resulting in longer waiting times for a large population.
 
 Following these game rounds, natural selection occurs. This process continues until the AI meets the criteria we defined (clear line count criteria to prevent the AI from playing indefinitely).
+
+<details>
+<summary>Show Code Preview</summary>
+
 ```python
 from population import Population
 import pygame
@@ -1282,6 +1432,8 @@ end_time = time.time()
 execution_time = end_time - start_time
 print(f"Temps d'exécution : {execution_time/60} minutes")
 ```
+</details>
+
 ### 5. How to run
 ***
 1. Install a python distribution on your computer
