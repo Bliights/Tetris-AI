@@ -13,6 +13,17 @@ class Ai:
         self.screen = screen
 
     def fixMultiplier(self):
+        
+        self.multipliers = {
+            "holeCountMultiplier": 100,
+            "bumpinessMultiplier": 20,
+            "lineClearMultiplier": 30,
+            "blocksRightLaneMultiplier": 10,
+            "averagePeakMultiplier": 10,
+            "maximumLineHeightMultiplier": 10,
+            "openHoleCountMultiplier": 50
+        }
+        '''
         #Multipliers of an AI that have already clear more than 5000 lines
         self.multipliers = {
             "holeCountMultiplier": 70.36429053695697,
@@ -21,18 +32,22 @@ class Ai:
             "blocksRightLaneMultiplier": 53.66749731564597,
             "averagePeakMultiplier": 49.23906630306003,
             "maximumLineHeightMultiplier": 0.17007162860407377,
+            "openHoleCountMultiplier": 20
         }
-        '''
-        Multipliers of an Ai who play better but the rng can kill her
+        
+        
+        #Multipliers of an Ai who play better but the rng can kill her
         self.multipliers = {
-            "holeCountMultiplier": 94.02304036662251,
-            "bumpinessMultiplier": 59.569217634263715,
-            "lineClearMultiplier": 6.924302166686747,
-            "blocksRightLaneMultiplier": 31.176655812879705,
-            "averagePeakMultiplier": 15.184655350808052,
-            "maximumLineHeightMultiplier": 48.462326479791116,
+            "holeCountMultiplier": 58.00620071545885,
+            "bumpinessMultiplier": 15.478826049217009,
+            "lineClearMultiplier": 30.840721119966208,
+            "blocksRightLaneMultiplier": 76.30854461997914,
+            "averagePeakMultiplier": 84.55706282799669,
+            "maximumLineHeightMultiplier": 61.7293705010352,
+            "openHoleCountMultiplier": 20
         }
         '''
+        
 
     def randomizeMultipliers(self):
         self.multipliers = {
@@ -42,6 +57,7 @@ class Ai:
             "blocksRightLaneMultiplier": uniform(0, 100),
             "averagePeakMultiplier": uniform(0, 100),
             "maximumLineHeightMultiplier": uniform(0, 100),
+            "openHoleCountMultiplier": uniform(0, 100)
         }
 
     def calculateFitness(self):
@@ -81,6 +97,7 @@ class Ai:
         blocksRightmostLane = boardCopy.count_blocks_in_rightmost_lane()
         averagePeaks = boardCopy.get_average_peaks()
         maximumLineHeight = boardCopy.get_maximum_line_height()
+        openHoles = boardCopy.get_number_open_holes()
 
         costLineClear = 0
         if lineClear != 4:
@@ -95,6 +112,7 @@ class Ai:
             + self.multipliers["blocksRightLaneMultiplier"] * blocksRightmostLane
             + self.multipliers["averagePeakMultiplier"] * averagePeaks
             + self.multipliers["maximumLineHeightMultiplier"] * maximumLineHeight
+            +self.multipliers["openHoleCountMultiplier"] * openHoles
         )
 
     def getBestMove(self):

@@ -69,7 +69,14 @@ while running:
                 elif event.key == pygame.K_SPACE:
                     game.status.drop = False
                     game.status.drop_limiter = True
-        
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # Menu button
+                if game.display_elements["Solo_homeButton"].mouse_in_element():
+                    game.reset()
+                    game.status.set_home()
+                # Exit button
+                elif game.display_elements["Solo_exitButton"].mouse_in_element():
+                    running = False
             
         if game.status.move_left:
             game.move_piece_left()
@@ -115,6 +122,14 @@ while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    # Menu button
+                    if game.display_elements["Solo_homeButton"].mouse_in_element():
+                        ai.reset()
+                        game.status.set_home()
+                    # Exit button
+                    elif game.display_elements["Solo_exitButton"].mouse_in_element():
+                        running = False
             if(len(ai.movementPlan)==0):
                 ai.addMoves(ai.getBestMove())
             ai.nextMove()

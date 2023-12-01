@@ -140,6 +140,26 @@ class Board:
                     maxHeight=gridHeight-i
         return maxHeight
     
+    def get_number_open_holes(self):
+        numberOpenHoles=0
+        peaks=[0]*gridWidth
+        for i in range(gridWidth):
+            j=0
+            while j<gridHeight and self.grid[j][i]==0:        
+                j+=1
+            peaks[i]=gridHeight-j
+        for i in range(gridWidth):
+            if(i==0):
+                if peaks[i+1]-peaks[i]>3:
+                    numberOpenHoles+=(peaks[i+1]-peaks[i])//4
+            elif(i==gridWidth-1):
+                if peaks[i-1]-peaks[i]>3:
+                    numberOpenHoles+=(peaks[i-1]-peaks[i])//4
+            else:
+                if min(peaks[i-1],peaks[i+1])-peaks[i]>3:
+                    numberOpenHoles+=(min(peaks[i-1],peaks[i+1])-peaks[i])//4
+        return numberOpenHoles
+    
     # Draw the board at the (x,y) coordinate (top left corner of the board)
     def draw_board(self, screen, x, y):
         for i in range(gridHeight):

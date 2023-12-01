@@ -67,6 +67,26 @@ class TetrisGame:
                                                 30,
                                                 "black"
                                                 ),
+            "Solo_exitButton" : Display_Element(screen.get_width()-70,
+                                                40,
+                                                "Exit",
+                                                30,
+                                                "black",
+                                                100,
+                                                50,
+                                                "red",
+                                                "black"
+                                                ),
+            "Solo_homeButton" : Display_Element(screen.get_width()-70,
+                                                100,
+                                                "Menu",
+                                                30,
+                                                "black",
+                                                100,
+                                                50,
+                                                "green",
+                                                "black"
+                                                ),
             "Game_over_gameOverText" : Display_Element(screen.get_width()//2,
                                                        screen.get_height()//2,
                                                        "Game Over",
@@ -155,7 +175,7 @@ class TetrisGame:
         else:
             if not self.status.is_game_over():
                 self.board.place_piece(self.current_piece)
-                
+                self.gravity_timer = 0
                 lineClear = self.board.clear_lines()
                 self.totaLinesClear += lineClear
                 self.update_score(lineClear)
@@ -274,6 +294,8 @@ class TetrisGame:
                                    (screen.get_height() - 3*gridHeight* cellSize//9)//2)
         self.display_elements["Solo_scoreText"].draw(screen)
         self.display_elements["Solo_levelText"].draw(screen)
+        self.display_elements["Solo_exitButton"].draw(screen)
+        self.display_elements["Solo_homeButton"].draw(screen)
         
         
     def draw_game_over(self,screen):
