@@ -277,6 +277,181 @@ The AI needs to develop a strategy for playing Tetris effectively. This involves
 \subsection{Adaptability}
 To make the AI adaptable, it should be able to learn and improve its strategies over time. This can be achieved by continuously updating and retraining the AI model with new data as more gameplay is recorded. The model should be able to generalize its knowledge and adjust its strategies based on the changing game dynamics and patterns observed in the data. This adaptability will allow the AI to become increasingly proficient at playing Tetris.
 
+\clearpage
+\section{Architecture Design Implementation}
+\subsection{Overall Architecture}
+
+\begin{figure}[h]
+    \centering
+    \fbox{\includegraphics[scale=0.211]{images/triste_uml.png}}
+    \caption{UML}
+    \label{fig:Display}
+\end{figure}
+\clearpage
+
+\subsection{Directory organization}
+
+\begin{center}
+\begin{tabular}{  | m{1.3cm} | m{1.7cm} | m{4.7cm} | } 
+    \hline
+     Directory & Files name & Description \\
+    \hline
+    Tetris-AI & 
+    tetrisgame.py & 
+    - The purpose of this code is to create our Tetris game base. It uses nearly all the  class in the other py files to create a Tetris game. The current piece is managed using methods such as move$\_$piece$\_$left, move$\_$piece$\_$right, move$\_$piece$\_$down  rotate$\_$piece and drop methods
+    \newline- The class updates the score with update$\_$score and the level with update$\_$level according to the lines cleared. The graphical display, including the home and end of game screens, is handled by the draw$\_$home$\_$menu, draw$\_$solo$\_$game and draw$\_$game$\_$over methods using the Pygame\cite{b4} library. \\
+     \hline
+     Tetris-AI &
+    piece.py & 
+    - The Piece code defines a Piece class to represent the pieces in the Tetris game. Each instance of the class is a piece with a random shape, a corresponding colour, and x and y coordinates for its position. This code can be used to direct the part to the left, right or bottom, to rotate it, and to draw the part and its 'shadow' on the screen. Moreover The get$\_$pathto$\_$position method returns the list of movements necessary to move the piece to a specific position.\\
+     \hline
+    Tetris-AI & 
+    population.py &
+    - The population code implements a genetic algorithm to evolve an AI population in Tetris. It promotes the reproduction of the best adapted individuals. The Population class manages the initial creation of the population, natural selection, mutation and the creation of new generations of AIs.  
+     
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+\begin{tabular}{ | m{1.3cm} | m{1.7cm} | m{4.7cm} | } 
+
+    Tetris-AI & 
+    population.py &
+     The update function is used to progress each individual through the game simulation, calculateAiFitnesses to evaluate the performance of each AI, naturalSelection to carry out natural selection.\\
+      
+    \hline
+    Tetris-AI & 
+    training.py & 
+    - The aim of the training is to train an AI capable of maximising the number of lines deleted in the game Tetris. It uses the Population class by instantiating it, then iterating over the generations, updating the individuals and performing natural selection.\\
+     \hline
+     Tetris-AI & 
+    status.py & 
+    - The Status class in Python is a status handler for the Tetris game. It includes methods such as set$\_$game$\_$over, set$\_$home, set$\_$solo, set$\_$ai to change the status of the game. The is$\_$home, is$\_$game$\_$over, is$\_$solo, and is$\_$ai functions are used to check the current state of the game. The class also provides reset methods, including reset$\_$controls to reset controls, and reset to reset the entire state of the game.\\
+     \hline
+    Tetris-AI & 
+    main.py & 
+    - This code uses the Pygame library to implement the Tetris game, integrating essential Pygame functions such as keyboard/mouse event management with pygame.event.get() and display updating with pygame.display.update(). Tetris features are managed by the class instance of tetrisgame. \\
+    \hline
+    Tetris-AI & 
+    display.py & 
+    - This code implements a class called Display$\_$Element, which creates graphical elements, such as buttons, for the Tetris user interface. Moreover this class contain methods that are really useful for the user action detection like the  mouse$\_$in$\_$element(), which checks whether the mouse is on the element.\\
+
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+\begin{tabular}{| m{1.3cm} | m{1.7cm} | m{4.7cm} | } 
+
+    Tetris-AI & 
+    constants.py &
+    - This code defines useful constants for the game, including the dimensions of the grid (gridWidth and gridHeight), the size of each cell (cellSize), the frame rate (fps), and the maximum possible score (maxscore). It has also a lists the different shapes of Tetris pieces with their representation in matrices of 1 and 0, as well as the colours associated with each shape (color$\_$per$\_$shape). Moreover, include colour dictionary (colors) to represent the different colours used in the game.
+    \newline-Finally it as a maxScore line for the save of the best score. All these element necessary to ensure that the game is consistent and easy to maintain and having them in one file is pratical. \\
+    \hline
+    Tetris-AI & 
+    clock.py & 
+    - This code defines a Clock class in the Pygame module. The class is used to manage time and updates at a specific rate of frames per second (fps). In the constructor ($\_$$\_$init$\_$$\_$), a pygame.time.Clock object is initialised, and the constant fps from the constant module is assigned to the fps attribute of the class. The tick method is defined to obtain the time elapsed since the last call to the tick function and maintain the defined frame rate. This class is useful for controlling the speed of the game, and ensuring that it runs at a constant rate. \\
+     \hline
+     Tetris-AI & 
+    board.py & 
+    - The Board code uses the Pygame module. It tests the validity of piece movements with is$\_$valid$\_$move, place$\_$piece to place a piece on the board, clear$\_$lines to clear complete lines.
+    - Also max$\_$drop$\_$position to determine the maximum drop position of a piece, and methods evaluating various aspects of the grid such as the height of peaks (get$\_$average$\_$peaks), irregularity (get$\_$bumpiness), number of holes (get$\_$number$\_$holes), and so on. \\
+
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+\begin{tabular}{ | m{1.3cm} | m{1.7cm} | m{4.7cm} | } 
+    Tetris-AI & 
+    ai.py & 
+    -  AI functions include calculateFitness to evaluate the AI's performance, getBestMove to determine the best possible move, mutate to introduce mutations into the evaluation multipliers, and clone to create a copy of the AI. The AI uses multipliers to evaluate moves according to various criteria, such as the number of holes, the irregularity of the board, the number of lines erased, and so on. \\
+    \hline
+\end{tabular}
+\end{center}
+
+\subsection{Module 1 : Main}
+The purpose of main is to provide the user with the ability to choose between a solo game, the AI game and exiting the program. Moreover, when Solo game is selected, main will check the key inputs of the player and assign the correct actions to the Tetris game. Finally, when the player loses, it shows the game over screen. If AI game is selected, main will create a tetris game and then use the AI class to play it. For each move, main calls getBestMove function from the AI class to determine the best move. After the best move is determined, main will go to the next move. This is repeated untill game over.
+Main's components are: display (the display of the game),  game (which is an instance of the Tetris game class), ai (which is an instance of the Ai class) and running, which is used to check if the user wants to exit the program, it is initialized as true at the start)
+
+\subsection{Module 2 : Constants}
+As it's name suggests, constants is a file in which all of the global constants necessary to the well functioning of the program are stored. Those include constants for the board such as the grid width and height and cell size. It also stores the frames per seconds, the best score ever on the game, the different shapes of the tetrominos and the different colors of the shapes and all the color useful for the display of the game.
+
+\subsection{Module 3 : Clock}
+The clock class is simply used to act as the clock in the game, adapting it's ticks to the fps variable stored in constants
+
+\subsection{Module 4 : Board}
+Board has two main variables, the grid which stores the different cells that are filled by  placed tetrominos, and the colour matrix which stores the colours of each cell for the display of it to the player/ observer.
+Board has several functions that are used both by solo players and the AI, those functions are used in piece movements and placement, such as verifying if a movement is valid (not out of bounds or clipping with already placed tetrominos), placing a piece on the board, clearing completed lines. Also, the function draw$\_$board manages the display of the board, and reset$\_$board resets it
+Moreover, Board also has specific functions for the AI. In those, some functions help to extract some data from the board for the AI to use, such as  the height of the highest column, the average height of the columns, the bumpiness, the number of holes in the structure of placed tetrominos and finally the number of filled cells in the right column (this helps determine the chances of making a Tetris). Also, the function get$\_$all$\_$positions will return all of the possible positions in which a piece can be placed on the board in the current configuration, this function will allow the AI to determine the best move according to it's model.
+All of the functions of board are written here because of their strong reliance on using data from the grid of the game to display the game, check the validity of moves, and extract useful data for the AI
+
+\subsection{Module 5 : Piece}
+Piece is initialized by creating a random shape from the shapes array in constants. This piece can then be used in the Tetris game. The piece class has functions dedicated to movement (right, left, down, rotate), display of the piece and it's shadow on the drop position right under it's current position, and finally it has the get$\_$path$\_$to$\_$positon which is useful for the AI to write the necessary movement the piece need to do to attain a specific position on the board.
+
+\subsection{Module 6 : Display}
+Display is a class used to make the tools that are used to display information to the rest of the program or button. This class was principally created to facilitate the creation of display element and also the detection of the user behavior for each element created. 
+
+\subsection{Module 7 : Status}
+Status stores different data on the status of the game. The variable game$\_$status can be "Home" for the home screen, "solo" for the solo game, "Ai" for the AI game and finally "game over. Status also stores data relative to the movement of pieces such as if it's moving right, left, down, rotating and dropping. Finally it has a function to reset the controls and to resets itself entirely.
+
+\subsection{Module 8 : Tetris}
+Tetris game stores the main tools used to make a Tetris game work. It imports the constants grid width,grid height,cellSize and maxscore. It also imports an instance of Board, Clock, Piece, Status and Display$\_$Element. With those, it also has specific variables such as the current and next pieces to be played, the score, the level, the gravity (speed at which the pieces fall), the game status and the display elements associated with that status. First Tetris is used to display all of the home screen (Home solo button, home ai button, home exit button, best score, etc), and does similarly with the game over screen and the in game screen. Then it has functions dedicated to game controls for moving left, right, and rotate while checking that the moves are valid. It also checks for game overs. Finally, it also has tools to update the game, such as updating the levels and gravity (speed at which the piece falls), updating the score and displaying those updates on the in game screen.
+
+\subsection{Module 9 : AI}
+The AI class is the main tool to use an AI according to a model to play Tetris. The AI class is not only used to play the game, but also provides useful data for the training using a genetics algorithm.
+The AI class imports TetrisGame. In terms of variables, AI has the current game being played for the instance of TetrisGame, multipliers for the different data collected, the fitness of the AI (used in training), the movement plan (the list of movements to do in order in the game) and a screen. In terms of functions, AI has two functions for the multipliers of data, one is fixed and predermined for the best  multipliers currently found, and the other is to set the multipliers randomly. The calculatFitness function calculates how good the AI is depending on it's best score. The nextMove function applies the first move (moving right, left, rotating or dropping)  and switches to the next one to do. The placeInBoardAtPosition function directly places a piece at a specific position. The costOfMove function calculates how good a specific move is for the AI depending on the multipliers that were previously defined. getBestMove chooses the best move amongst all of the possible moves in the current game configuration. Then AI has two functions for the genetic algorithm part: mutate and clone. Finally it has a reset function.
+
+\subsection{Module 10 : Population}
+The population class has for goal to manage a population of AIs through different generations, it creates generations and then has functions to make them evolve through time with a genetics algorithm.
+Population imports AI. It has several class variables, those are populationSize, maxGeneration (maximum number of generations), chanceToMutate, gradedRetainPercent (the percentage of the best AIs to retain), chanceRetainNongraded (chance to retain bad AIs), screen and then AI population which is a list of AIs.
+In terms of functions, population has one for updating the AI, calculating the overall fitness for all AIs, sorting the population based on fitness, and selecting the best AI in the generation. Moreover population has functions for keeping the AIs (the parents) and creating offspring to complete the population (createParents and createChildren). Additionally, Population has functions to potentially mutate the population and the function responsible for the entire natural selection process.
+
+\subsection{Module 11 : Training}
+The training.py file can be executed to train the AI. It uses population.py to manage the different generations and use the genetics algorithm. In training you can set the parameters you desire for the training in the following variables: populationSize, maxGeneration, chanceToMutate, gradedRetainPercent, chanceRetainNongraded
+While the number of generations or the chosen "win" criteria (for us it was clearing 1000 lines) isn't completed it repeats the following operation: executing a population generation through using multithreading (which was faster than multiprocessing for our case) and applying the genetics algorithm to create a new generation. It also prints the max number of lines cleared by an AI to check the progress made during each generation.
+Finally, it prints the generation at which the "win" criteria was completed and shows the time it took.
+
+\section{Use Cases}
+\begin{enumerate}
+    \item Game Launch and Menu Screen: \\
+When the user launches the game, they will be presented with the following Menu Screen. From this Screen, the user can select to run the Tetris game in Solo Mode, AI Mode or Exit the game.
+\begin{figure}[htbp]
+\centering
+    \fbox{\includegraphics[scale = 0.13]{Menu Screen.png}}
+    \caption{Screenshot of Triste - Menu}
+    \label{fig:Display}
+\end{figure} \\
+
+\item Solo Mode: \\
+When the user clicks the “Solo Mode” option, they will be brought to the following screen showing a basic game of Tetris. To control the movement of the Tetrominoes, the user can use the Left and Right arrow keys to move the game pieces, the Up arrow key to rotate the game pieces, the Down arrow key to drag the game pieces down slowly, and the Spacebar to drop the game pieces.
+\begin{figure}[htbp]
+\centering
+    \fbox{\includegraphics[scale = 0.13]{Solo Screen.png}}
+    \caption{Screenshot of Triste - Solo Mode}
+    \label{fig:Display}
+\end{figure} \\
+\vspace{20pt}
+
+\item AI Mode: \\
+When the user clicks the “AI Mode” option, the user will be brought to a screen exactly like the screen displayed in Solo Mode, but the AI will do all of the work to play the game until the limit is reached and the Game Over screen is displayed.
+\begin{figure}[htbp]
+\centering
+    \fbox{\includegraphics[scale = 0.13]{AI Screen.png}}
+    \caption{Screenshot of Triste - AI Mode}
+    \label{fig:Display}
+\end{figure} \\
+
+\item Game Over: \\
+Regardless of whichever mode the user selects, when the game has reached its limit and no more Tetrominoes can be placed, the Game Over screen will be displayed. From this screen, the user will see their score for the current game, and the best score achieved from the game. Then, the user can chose to either restart in the mode that was previously selected, return to the main menu and select a different mode, or exit the game. When the User exits the game, the window is closed.
+\begin{figure}[htbp]
+\centering
+    \fbox{\includegraphics[scale= 0.13]{Game Over.png}}
+    \caption{Screenshot of Triste - Game Over}
+    \label{fig:Display}
+\end{figure} \\
+\end{enumerate}
 
 \begin{thebibliography}{00}
 \bibitem{b1} Code Bullet, "I Created An A.I. to DESTROY Tetris", YouTube, [Online]. Available : \url{https://youtu.be/QOJfyp0KMmM?si=dKykHlZGzpcrUu4L} [Accessed Oct. 7, 2023]
@@ -294,6 +469,7 @@ To make the AI adaptable, it should be able to learn and improve its strategies 
 
 
 \end{thebibliography}
+
 
 
 \end{document}
