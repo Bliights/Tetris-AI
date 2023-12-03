@@ -26,7 +26,8 @@ while population.generation<population.maxGeneration and population.maxlineClear
         executor.map(population.update,range(len(population.aiPopulation))) 
     population.naturalSelection()
     print(f'Max Lines clear : {population.maxlineClear} ({population.generation} generation)')
-
+    print(population.bestAi.multipliers)
+    
 print(f"Solution found at generation n {population.generation}")
 print(population.bestAi.multipliers)
 

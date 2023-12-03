@@ -1,5 +1,5 @@
 from tetrisgame import TetrisGame
-from random import random, uniform
+from random import random, uniform, randint
 import copy
 
 
@@ -12,43 +12,28 @@ class Ai:
         self.movementPlan = []
         self.screen = screen
 
-    def fixMultiplier(self):
-        
+    def fixMultiplier(self):       
         self.multipliers = {
             "holeCountMultiplier": 100,
-            "bumpinessMultiplier": 20,
-            "lineClearMultiplier": 30,
-            "blocksRightLaneMultiplier": 10,
-            "averagePeakMultiplier": 10,
-            "maximumLineHeightMultiplier": 10,
-            "openHoleCountMultiplier": 50
+            "bumpinessMultiplier": 10,
+            "lineClearMultiplier": 60,
+            "blocksRightLaneMultiplier": 30,
+            "averagePeakMultiplier": 30,
+            "maximumLineHeightMultiplier": 60,
+            "openHoleCountMultiplier": 40
         }
         '''
-        #Multipliers of an AI that have already clear more than 5000 lines
         self.multipliers = {
-            "holeCountMultiplier": 70.36429053695697,
-            "bumpinessMultiplier": 37.73546367656465,
-            "lineClearMultiplier": 4.952631116903594,
-            "blocksRightLaneMultiplier": 53.66749731564597,
-            "averagePeakMultiplier": 49.23906630306003,
-            "maximumLineHeightMultiplier": 0.17007162860407377,
-            "openHoleCountMultiplier": 20
-        }
-        
-        
-        #Multipliers of an Ai who play better but the rng can kill her
-        self.multipliers = {
-            "holeCountMultiplier": 58.00620071545885,
-            "bumpinessMultiplier": 15.478826049217009,
-            "lineClearMultiplier": 30.840721119966208,
-            "blocksRightLaneMultiplier": 76.30854461997914,
-            "averagePeakMultiplier": 84.55706282799669,
-            "maximumLineHeightMultiplier": 61.7293705010352,
-            "openHoleCountMultiplier": 20
-        }
+            'holeCountMultiplier': 42.68264153847743, 
+            'bumpinessMultiplier': 13.587323081008062, 
+            'lineClearMultiplier': 78.37682266274075, 
+            'blocksRightLaneMultiplier': 31.411371718826906, 
+            'averagePeakMultiplier': 65.86099291324257, 
+            'maximumLineHeightMultiplier': 22.520383663033915, 
+            'openHoleCountMultiplier': 29.52488638146715
+            }
         '''
         
-
     def randomizeMultipliers(self):
         self.multipliers = {
             "holeCountMultiplier": uniform(0, 100),
@@ -151,10 +136,15 @@ class Ai:
             self.movementPlan.append(path[i])
 
     def mutate(self, mutationRate):
-        for key, value in self.multipliers.items():
-            if random() < mutationRate:
-                self.multipliers[key] = uniform(0, 100)
-
+        if random() < mutationRate:
+            num = randint(0, len(self.multipliers)-1)
+            count=0
+            for key, value in self.multipliers.items():
+                if num == count:
+                    self.multipliers[key] = uniform(0, 100)
+                    break
+                count+=1
+            
     def clone(self):
         clone = Ai(self.screen)
         clone.multipliers = self.multipliers

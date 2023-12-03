@@ -195,6 +195,7 @@ class TetrisGame:
              return True
          else:
              return False
+         
     def drop(self):
         is_drop=False
         while self.move_piece_down():
@@ -296,8 +297,7 @@ class TetrisGame:
         self.display_elements["Solo_levelText"].draw(screen)
         self.display_elements["Solo_exitButton"].draw(screen)
         self.display_elements["Solo_homeButton"].draw(screen)
-        
-        
+           
     def draw_game_over(self,screen):
         self.display_elements["Game_over_gameOverText"].draw(screen)
         self.display_elements["Game_over_scoreText"].draw(screen)

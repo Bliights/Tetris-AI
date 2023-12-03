@@ -140,6 +140,7 @@ class Board:
                     maxHeight=gridHeight-i
         return maxHeight
     
+    # Get the number of open holes that are bigger than 3 (only a bar can fill up the hole)
     def get_number_open_holes(self):
         numberOpenHoles=0
         peaks=[0]*gridWidth

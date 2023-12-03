@@ -110,7 +110,7 @@ Then, we created all the movements that our piece can perform, including right, 
 <summary>Show Code Preview</summary>
 
 ```python
-# Move the piece one square to the left
+    # Move the piece one square to the left
     def move_left(self):
         self.x -= 1
     
@@ -134,7 +134,7 @@ We also created a function that generates a list of strings containing instructi
 <summary>Show Code Preview</summary>
 
 ```python
-def get_path_to_position(self,position):
+    def get_path_to_position(self,position):
         horizontal_mvt = position[0]-self.x
         rotations = position[2]
         path=[]
@@ -156,7 +156,7 @@ Finally, for displaying the piece, we created two methods. One method displays i
 <summary>Show Code Preview</summary>
 
 ```python
-# Draw the piece at the (x+piece.x,y+piece.y) coordinate (top left corner of the piece)
+    # Draw the piece at the (x+piece.x,y+piece.y) coordinate (top left corner of the piece)
     def draw_piece(self, screen, x, y):
         for i in range(len(self.shape)):
             for j in range(len(self.shape[0])):
@@ -232,7 +232,7 @@ Next, we created a method to test if moving a shape to a new position was possib
 <summary>Show Code Preview</summary>
 
 ```python
-# Test if the movement of the piece is correct
+    # Test if the movement of the piece is correct
     def is_valid_move(self, shape, newX, newY):
         for i in range(len(shape)):
             for j in range(len(shape[0])):
@@ -256,7 +256,7 @@ To handle game management, we created several methods:
 <summary>Show Code Preview</summary>
 
 ```python
-# Place the piece in the board
+    # Place the piece in the board
     def place_piece(self, piece):
         for i in range(len(piece.shape)):
             for j in range(len(piece.shape[0])):
@@ -293,12 +293,13 @@ Furthermore, we also created several methods to retrieve important information t
 - One method returning the number of holes in the grid structure.
 - One method returning the number of blocks in the rightmost column (column used for Tetris, cleared with the line).
 - One method returning the maximum height of the grid.
+- One method returning the number of open holes that only a bar can fill.
 
 <details>
 <summary>Show Code Preview</summary>
 
 ```python
-# Get the pick on the board
+    # Get the pick on the board
     def get_average_peaks(self):
         peaks=[0]*gridWidth
         for i in range(gridWidth):
@@ -341,6 +342,7 @@ Furthermore, we also created several methods to retrieve important information t
             if (self.grid[j][gridWidth-1]==1):
                 blocks_right_lane+=1
         return blocks_right_lane
+
     # Get the max height of the highest line
     def get_maximum_line_height(self):
         maxHeight=0
@@ -349,6 +351,27 @@ Furthermore, we also created several methods to retrieve important information t
                 if(self.grid[i][j] == 1 and maxHeight==0):
                     maxHeight=gridHeight-i
         return maxHeight
+
+    # Get the number of open holes that are bigger than 3 (only a bar can fill up the hole)    
+    def get_number_open_holes(self):
+        numberOpenHoles=0
+        peaks=[0]*gridWidth
+        for i in range(gridWidth):
+            j=0
+            while j<gridHeight and self.grid[j][i]==0:        
+                j+=1
+            peaks[i]=gridHeight-j
+        for i in range(gridWidth):
+            if(i==0):
+                if peaks[i+1]-peaks[i]>3:
+                    numberOpenHoles+=(peaks[i+1]-peaks[i])//4
+            elif(i==gridWidth-1):
+                if peaks[i-1]-peaks[i]>3:
+                    numberOpenHoles+=(peaks[i-1]-peaks[i])//4
+            else:
+                if min(peaks[i-1],peaks[i+1])-peaks[i]>3:
+                    numberOpenHoles+=(min(peaks[i-1],peaks[i+1])-peaks[i])//4
+        return numberOpenHoles
 ```
 </details>
 
@@ -358,7 +381,7 @@ We also created a method allowing us to obtain, for a shape, all the future posi
 <summary>Show Code Preview</summary>
 
 ```python
-# Get all the position possible for a piece in the board   
+    # Get all the position possible for a piece in the board   
     def get_all_position(self,pieceGiven):
         positions = []
         piece = copy.deepcopy(pieceGiven)
@@ -404,7 +427,7 @@ Finally, we created a method to display the board at coordinates (x, y) with coo
 <summary>Show Code Preview</summary>
 
 ```python
-# Draw the board at the (x,y) coordinate (top left corner of the board)
+    # Draw the board at the (x,y) coordinate (top left corner of the board)
     def draw_board(self, screen, x, y):
         for i in range(gridHeight):
             for j in range(gridWidth):
@@ -669,6 +692,26 @@ class TetrisGame:
                                                 30,
                                                 "black"
                                                 ),
+            "Solo_exitButton" : Display_Element(screen.get_width()-70,
+                                                40,
+                                                "Exit",
+                                                30,
+                                                "black",
+                                                100,
+                                                50,
+                                                "red",
+                                                "black"
+                                                ),
+            "Solo_homeButton" : Display_Element(screen.get_width()-70,
+                                                100,
+                                                "Menu",
+                                                30,
+                                                "black",
+                                                100,
+                                                50,
+                                                "green",
+                                                "black"
+                                                ),
             "Game_over_gameOverText" : Display_Element(screen.get_width()//2,
                                                        screen.get_height()//2,
                                                        "Game Over",
@@ -727,7 +770,7 @@ Then, we created all the necessary functions for the movement of the pieces whil
 <summary>Show Code Preview</summary>
 
 ```python
-def move_piece_left(self):
+    def move_piece_left(self):
         if self.board.is_valid_move(self.current_piece.shape, 
                                     self.current_piece.x - 1 , 
                                     self.current_piece.y):
@@ -765,7 +808,7 @@ def move_piece_left(self):
         else:
             if not self.status.is_game_over():
                 self.board.place_piece(self.current_piece)
-                
+                self.gravity_timer = 0
                 lineClear = self.board.clear_lines()
                 self.totaLinesClear += lineClear
                 self.update_score(lineClear)
@@ -785,6 +828,7 @@ def move_piece_left(self):
              return True
          else:
              return False
+
     def drop(self):
         is_drop=False
         while self.move_piece_down():
@@ -799,7 +843,7 @@ Next, we created functions responsible for gravity, level, score, and modificati
 <summary>Show Code Preview</summary>
 
 ```python
-def update_gravity(self):
+    def update_gravity(self):
         self.gravity_timer += 1
         if self.gravity_timer == self.gravity_speed:
             self.move_piece_down()
@@ -878,7 +922,7 @@ Finally, we defined all the necessary functions to display the different menus a
 <summary>Show Code Preview</summary>
 
 ```python
-def draw_home_menu(self,screen):
+    def draw_home_menu(self,screen):
         self.display_elements["Home_menuText"].draw(screen)
         self.display_elements["Home_soloButton"].draw(screen)
         self.display_elements["Home_aiButton"].draw(screen)
@@ -900,8 +944,9 @@ def draw_home_menu(self,screen):
                                    (screen.get_height() - 3*gridHeight* cellSize//9)//2)
         self.display_elements["Solo_scoreText"].draw(screen)
         self.display_elements["Solo_levelText"].draw(screen)
-        
-        
+        self.display_elements["Solo_exitButton"].draw(screen)
+        self.display_elements["Solo_homeButton"].draw(screen)
+            
     def draw_game_over(self,screen):
         self.display_elements["Game_over_gameOverText"].draw(screen)
         self.display_elements["Game_over_scoreText"].draw(screen)
@@ -1005,7 +1050,14 @@ while running:
                 elif event.key == pygame.K_SPACE:
                     game.status.drop = False
                     game.status.drop_limiter = True
-        
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # Menu button
+                if game.display_elements["Solo_homeButton"].mouse_in_element():
+                    game.reset()
+                    game.status.set_home()
+                # Exit button
+                elif game.display_elements["Solo_exitButton"].mouse_in_element():
+                    running = False
             
         if game.status.move_left:
             game.move_piece_left()
@@ -1051,6 +1103,14 @@ while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    # Menu button
+                    if game.display_elements["Solo_homeButton"].mouse_in_element():
+                        ai.reset()
+                        game.status.set_home()
+                    # Exit button
+                    elif game.display_elements["Solo_exitButton"].mouse_in_element():
+                        running = False
             if(len(ai.movementPlan)==0):
                 ai.addMoves(ai.getBestMove())
             ai.nextMove()
@@ -1091,6 +1151,10 @@ Furthermore, we equipped our AI with its own Tetris game instance and a list to 
 <summary>Show Code Preview</summary>
 
 ```python
+from tetrisgame import TetrisGame
+from random import random, uniform, randint
+import copy
+
 class Ai:
     def __init__(self, screen):
         self.game = TetrisGame(screen)
@@ -1100,28 +1164,17 @@ class Ai:
         self.movementPlan = []
         self.screen = screen
 
-    def fixMultiplier(self):
-        #Multipliers of an AI that have already clear more than 5000 lines
+    def fixMultiplier(self):       
         self.multipliers = {
-            "holeCountMultiplier": 70.36429053695697,
-            "bumpinessMultiplier": 37.73546367656465,
-            "lineClearMultiplier": 4.952631116903594,
-            "blocksRightLaneMultiplier": 53.66749731564597,
-            "averagePeakMultiplier": 49.23906630306003,
-            "maximumLineHeightMultiplier": 0.17007162860407377,
+            "holeCountMultiplier": 100,
+            "bumpinessMultiplier": 10,
+            "lineClearMultiplier": 60,
+            "blocksRightLaneMultiplier": 30,
+            "averagePeakMultiplier": 30,
+            "maximumLineHeightMultiplier": 60,
+            "openHoleCountMultiplier": 40
         }
-        '''
-        Multipliers of an Ai who play better but the rng can kill her
-        self.multipliers = {
-            "holeCountMultiplier": 94.02304036662251,
-            "bumpinessMultiplier": 59.569217634263715,
-            "lineClearMultiplier": 6.924302166686747,
-            "blocksRightLaneMultiplier": 31.176655812879705,
-            "averagePeakMultiplier": 15.184655350808052,
-            "maximumLineHeightMultiplier": 48.462326479791116,
-        }
-        '''
-
+        
     def randomizeMultipliers(self):
         self.multipliers = {
             "holeCountMultiplier": uniform(0, 100),
@@ -1130,6 +1183,7 @@ class Ai:
             "blocksRightLaneMultiplier": uniform(0, 100),
             "averagePeakMultiplier": uniform(0, 100),
             "maximumLineHeightMultiplier": uniform(0, 100),
+            "openHoleCountMultiplier": uniform(0, 100)
         }
 ```
 </details>
@@ -1140,7 +1194,7 @@ We then created a function to calculate the player's fitness, enabling us to com
 <summary>Show Code Preview</summary>
 
 ```python
-def calculateFitness(self):
+    def calculateFitness(self):
         if self.game.totaLinesClear != 0:
             self.fitness = self.game.score / self.game.totaLinesClear
         else:
@@ -1173,7 +1227,7 @@ To further the process, we defined the method that calculates the cost of a move
 <summary>Show Code Preview</summary>
 
 ```python
-def costOfMove(self, board, piece, position):
+    def costOfMove(self, board, piece, position):
         boardCopy = copy.deepcopy(board)
         pieceCopy = copy.deepcopy(piece)
 
@@ -1185,6 +1239,7 @@ def costOfMove(self, board, piece, position):
         blocksRightmostLane = boardCopy.count_blocks_in_rightmost_lane()
         averagePeaks = boardCopy.get_average_peaks()
         maximumLineHeight = boardCopy.get_maximum_line_height()
+        openHoles = boardCopy.get_number_open_holes()
 
         costLineClear = 0
         if lineClear != 4:
@@ -1199,6 +1254,7 @@ def costOfMove(self, board, piece, position):
             + self.multipliers["blocksRightLaneMultiplier"] * blocksRightmostLane
             + self.multipliers["averagePeakMultiplier"] * averagePeaks
             + self.multipliers["maximumLineHeightMultiplier"] * maximumLineHeight
+            +self.multipliers["openHoleCountMultiplier"] * openHoles
         )
 
     def getBestMove(self):
@@ -1240,14 +1296,19 @@ Finally, we created a method for adding a move to the list of pending moves, alo
 <summary>Show Code Preview</summary>
 
 ```python
-def addMoves(self, path):
+    def addMoves(self, path):
         for i in range(len(path)):
             self.movementPlan.append(path[i])
 
     def mutate(self, mutationRate):
-        for key, value in self.multipliers.items():
-            if random() < mutationRate:
-                self.multipliers[key] = uniform(0, 100)
+        if random() < mutationRate:
+            num = randint(0, len(self.multipliers)-1)
+            count=0
+            for key, value in self.multipliers.items():
+                if num == count:
+                    self.multipliers[key] = uniform(0, 100)
+                    break
+                count+=1
 
     def clone(self):
         clone = Ai(self.screen)
@@ -1312,7 +1373,7 @@ Next, we created the functions necessary for training: updating the AI, calculat
 <summary>Show Code Preview</summary>
 
 ```python
-def update(self,i):
+    def update(self,i):
         while self.aiPopulation[i].game.status.is_solo() and self.aiPopulation[i].game.totaLinesClear<10000:
             if(len(self.aiPopulation[i].movementPlan)==0):
                 self.aiPopulation[i].addMoves(self.aiPopulation[i].getBestMove())
@@ -1341,7 +1402,7 @@ To conclude the training, we defined the method for keeping the AIs (the parents
 <summary>Show Code Preview</summary>
 
 ```python
-def createParents(self):
+    def createParents(self):
         parents = self.aiPopulation[:self.gradedIndividualCount]
         for individual in self.aiPopulation[self.gradedIndividualCount:]:
             if random() < self.chanceRetainNongraded:
@@ -1422,7 +1483,8 @@ while population.generation<population.maxGeneration and population.maxlineClear
         executor.map(population.update,range(len(population.aiPopulation))) 
     population.naturalSelection()
     print(f'Max Lines clear : {population.maxlineClear} ({population.generation} generation)')
-
+    print(population.bestAi.multipliers)
+    
 print(f"Solution found at generation n {population.generation}")
 print(population.bestAi.multipliers)
 
