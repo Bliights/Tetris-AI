@@ -15,7 +15,8 @@
    1. [Creating a population](#i-creating-a-population)
    2. [Where the training unfolds](#ii-where-the-training-unfolds)
 5. [How to run](#5-how-to-run)
-6. [Contributors](#6-contributors)
+6. [Demo](#6-demo)
+7. [Contributors](#7-contributors)
 
 ### 1. Introdution
 ***
@@ -1144,7 +1145,7 @@ pygame.quit()
 
 ### 3. Creation of the AI
 ***
-To develop an AI that plays Tetris, we opted to create a function responsible for estimating the cost of each potential move. To achieve this, we selected various parameters that we deemed relevant for our AI. These parameters include the number of holes, bumpiness, the number of lines cleared by the move, the number of blocks in the rightmost column, the average peak, and the maximum line height. Once these parameters were defined, we created a method that randomly selects a number between 0 and 100 for each multiplier.
+To develop an AI that plays Tetris, we opted to create a function responsible for estimating the cost of each potential move. To achieve this, we selected various parameters that we deemed relevant for our AI. These parameters include the number of holes, bumpiness, the number of lines cleared by the move, the number of blocks in the rightmost column, the average peak, the number of open holes and the maximum line height. Once these parameters were defined, we created a method that randomly selects a number between 0 and 100 for each multiplier.
 Furthermore, we equipped our AI with its own Tetris game instance and a list to store all its future movements.
 
 <details>
@@ -1164,15 +1165,15 @@ class Ai:
         self.movementPlan = []
         self.screen = screen
 
-    def fixMultiplier(self):       
+    def fixMultiplier(self):      
         self.multipliers = {
-            "holeCountMultiplier": 100,
-            "bumpinessMultiplier": 10,
-            "lineClearMultiplier": 60,
-            "blocksRightLaneMultiplier": 30,
-            "averagePeakMultiplier": 30,
-            "maximumLineHeightMultiplier": 60,
-            "openHoleCountMultiplier": 40
+            'holeCountMultiplier': 99.19118639408582, 
+            'bumpinessMultiplier': 27.7875228027838133, 
+            'lineClearMultiplier': 40.255678920084427, 
+            'blocksRightLaneMultiplier': 30.57724385974105, 
+            'averagePeakMultiplier': 13.22146800503185, 
+            'maximumLineHeightMultiplier': 24.76785274467504, 
+            'openHoleCountMultiplier': 29.540934405234474
         }
         
     def randomizeMultipliers(self):
@@ -1507,7 +1508,11 @@ print(f"Temps d'exécution : {execution_time/60} minutes")
 3. Run the main file to play the game
    `python main.py`
 
-### 6. Contributors
+### 6. Demo
+***
+YouTube link : [Triste](https://youtu.be/521g_3WgIAY)
+
+### 7. Contributors
 ***
 |            Name            |      College      |    Department    |                   Email                   |
 | :------------------------: | :---------------: | :--------------: | :---------------------------------------: |

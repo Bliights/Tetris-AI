@@ -12,27 +12,16 @@ class Ai:
         self.movementPlan = []
         self.screen = screen
 
-    def fixMultiplier(self):       
+    def fixMultiplier(self):      
         self.multipliers = {
-            "holeCountMultiplier": 100,
-            "bumpinessMultiplier": 10,
-            "lineClearMultiplier": 60,
-            "blocksRightLaneMultiplier": 30,
-            "averagePeakMultiplier": 30,
-            "maximumLineHeightMultiplier": 60,
-            "openHoleCountMultiplier": 40
+            'holeCountMultiplier': 99.19118639408582, 
+            'bumpinessMultiplier': 27.7875228027838133, 
+            'lineClearMultiplier': 40.255678920084427, 
+            'blocksRightLaneMultiplier': 30.57724385974105, 
+            'averagePeakMultiplier': 13.22146800503185, 
+            'maximumLineHeightMultiplier': 24.76785274467504, 
+            'openHoleCountMultiplier': 29.540934405234474
         }
-        '''
-        self.multipliers = {
-            'holeCountMultiplier': 42.68264153847743, 
-            'bumpinessMultiplier': 13.587323081008062, 
-            'lineClearMultiplier': 78.37682266274075, 
-            'blocksRightLaneMultiplier': 31.411371718826906, 
-            'averagePeakMultiplier': 65.86099291324257, 
-            'maximumLineHeightMultiplier': 22.520383663033915, 
-            'openHoleCountMultiplier': 29.52488638146715
-            }
-        '''
         
     def randomizeMultipliers(self):
         self.multipliers = {
