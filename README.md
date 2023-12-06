@@ -1,6 +1,6 @@
 # Triste
 ## Table of Contents
-1. [Introduction](#1-introdution)
+1. [Introduction](#1-introduction)
 2. [Creation of Tetris](#2-creation-of-tetris)
    1. [Definition of Constants](#i-definition-of-constants-constantspy)
    2. [Creation of the Piece](#ii-creation-of-the-piece-piecepy)
@@ -11,14 +11,14 @@
    7. [Creation of the Game](#vii-creation-of-the-game-tetrisgamepy)
    8. [Execution of the Game](#viii-execution-of-the-game-mainpy)
 3. [Creation of the ai](#3-creation-of-the-ai)
-4. [Traning](#4-training)
+4. [Training](#4-training)
    1. [Creating a population](#i-creating-a-population)
    2. [Where the training unfolds](#ii-where-the-training-unfolds)
 5. [How to run](#5-how-to-run)
 6. [Demo](#6-demo)
 7. [Contributors](#7-contributors)
 
-### 1. Introdution
+### 1. Introduction
 ***
 This project proposal aims to delve deeply into the game Tetris, focusing on two essential aspects. Firstly, it involves faithfully recreating the game Tetris and conducting an in-depth analysis of its functioning, design, and history. Secondly, this project seeks to develop an Artificial Intelligence (AI) capable of mastering Tetris to the extent of never losing.
 
