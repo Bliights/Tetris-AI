@@ -180,39 +180,35 @@ Define conditions for ending the game, typically when the game grid becomes too 
 Design and integrate HUD elements, including score display, level indicator, and upcoming tetromino preview, providing essential information to the player during gameplay. For the AI, these functions should also be inputs that are directly provided to the AI so it can play without having to use the graphical interface. This interface is simply used for the human users of the game.
 
 \section*{Creation of the AI}
-\subsection{Data Collection}
-The AI system needs access to a comprehensive dataset of Tetri's gameplays from which it can learn. This dataset should encompass a variety of game scenarios, including different starting positions, levels, and player actions.
-\subsection{Input Processing}
-The AI should possess the ability to process the current game state, which includes the current Tetrimino, the matrix of filled blocks, and the current score.
-\subsection{Strategy Development}
-The AI system must develop a strategic approach to decision-making regarding the placement of Tetriminos. This strategy should take into account various factors such as maximizing score, clearing lines, avoiding stacking blocks, and ensuring long-term success.
-\subsection{Adaptability}
-The AI system must be designed to adapt to different levels of difficulty and game speeds. This adaptability ensures that the AI can effectively handle various game scenarios and continue to perform well as the game progresses.
+\subsection{Movement Decision Strategy}
+The AI system must develop a strategic approach to decision-making regarding the placement of Tetriminos. This strategy should take into account various factors such as maximizing score, clearing lines, avoiding stacking blocks, and ensuring long-term success. The AI system must be designed to adapt to different levels of difficulty and game speeds. This adaptability ensures that the AI can effectively handle various game scenarios and continue to perform well as the game progresses. Finnaly the AI should possess the ability to process the current game state, which includes the current Tetrimino, the matrix of filled blocks, and the current score.
+\subsection{Training}
+The primary goal of training the AI is to refine its decision-making capabilities in Tetris. By exposing the AI to various game scenarios and optimizing parameters, we aim to enhance its ability to make strategic and effective moves.The training process seeks to identify and refine the optimal configuration of parameters governing the AI's decision-making. This involves adjusting parameters.
 \newline
-\newline
-By fulfilling these general requirements, it is possible to design and develop an AI system that can efficiently learn and play Tetris. However, it is important to note that the AI will require continuous refinement, debugging, and iteration to improve its performance and ensure its success in various game scenarios.
+The ultimate objective is to improve the AI's overall performance in playing Tetris. This includes achieving higher scores, clearing lines more efficiently, and demonstrating a strategic understanding of the game dynamics.
 
+By fulfilling these general requirements, it is possible to design and develop an AI system that can efficiently learn and play Tetris. However, it is important to note that the AI will require continuous refinement, debugging, and iteration to improve its performance and ensure its success in various game scenarios.
 
 \section{Development environment}
 \subsection{Choice of software development platform}
 
 \subsection*{Software platform}
 
-Our project is being carried out on the Windows software platform. Windows is compatible with a wide range of Python development tools, including VisualStudio Code and IDLE, which make it easier to debug code. Windows also supports the Python libraries and frameworks commonly used for AI development, including Pygame\cite{b4} and PyTorch\cite{b5}. Our project is a game, which needs to be manipulated by as many people as possible. Our aim is to be able to share it with users. Windows seemed the best choice, because it supports a wide variety of hardware configurations. This means that if we develop our game, it will be compatible on a wide range of computers. As we are all familiar with the Windows environment, it was an obvious choice for us.
+Our project is being carried out on the Windows software platform. Windows is compatible with a wide range of Python development tools, including VisualStudio Code and IDLE, which make it easier to debug code. Windows also supports the Python libraries and frameworks commonly used for AI development, including Pygame\cite{b4}. Our project is a game, which needs to be manipulated by as many people as possible. Our aim is to be able to share it with users. Windows seemed the best choice, because it supports a wide variety of hardware configurations. This means that if we develop our game, it will be compatible on a wide range of computers. As we are all familiar with the Windows environment, it was an obvious choice for us.
 
 
 
 
 \subsection*{Programming language}
 
-We decided to create our game in Python, mainly for its simplicity and readability, which makes it easier to create Tetris and implement the AI. Python is a rich computer language, full of libraries that make game creation easier. It has a vast collection of frameworks that are useful for game development (notably Pygame\cite{b4}). Python has also become a programming language that is frequently used to create AI (thanks in particular to the Sickit-learn and PyTorch libraries\cite{b5}). Because Python is an interpretive language, we can develop, test and iterate quickly. The debugging tools are effective and, being familiar with the language, we can move forward more quickly and correct our mistakes. 
+We decided to create our game in Python, mainly for its simplicity and readability, which makes it easier to create Tetris and implement the AI. Python is a rich computer language, full of libraries that make game creation easier. It has a vast collection of frameworks that are useful for game development (notably Pygame\cite{b4}). Python has also become a programming language that is frequently used to create AI (thanks in particular to the Sickit-learn and PyTorch libraries). Because Python is an interpretive language, we can develop, test and iterate quickly. The debugging tools are effective and, being familiar with the language, we can move forward more quickly and correct our mistakes. 
 That's why Python seemed to be the best choice. 
 
 \subsection*{Development Environment}
 The project will be developped using Spyder, which is a free and open source development environment for python coding.  It features a unique combination of the advanced editing, analysis, debugging, and profiling functionality of a comprehensive development tool with the data exploration, interactive execution, deep inspection, and beautiful visualization capabilities of a scientific package. In terms of computer ressources, we have  access to five laptops, including two gaming laptops with advanced consumer available CPUs which could be helpful to the free training of the AI.
 
 \subsection*{Cost estimation }
-By creating our code from scratch in Python, the project will cost nearly nothing. All we need to do is download Python (a programming language that can be downloaded free of charge). By downloading Python, various libraries can be installed, also free of charge. These are the ones we will be using to create our AI. Furthermore, to train our AI, we will likely use AWS, which costs almost nothing when we select certain specific configurations.
+By creating our code from scratch in Python, the project will cost nearly nothing. All we need to do is download Python (a programming language that can be downloaded free of charge). By downloading Python, various libraries can be installed, also free of charge. These are the ones we will be using to create our AI.
 
 
 \subsection{Software in use}
@@ -229,10 +225,6 @@ To meet our project requirements, we have adopted Overleaf as a central platform
 GitHub is a key tool in our project's software toolkit, streamlining version control, collaborative development, and project management. It serves as a web-based platform for hosting project source code, ensuring accessibility to all team members. Integration with Git simplifies remote storage management, while enabling seamless collaboration in our project. It facilitates concurrent work on different project aspects and eases code review and integration to maintain software quality.
 \subsection*{PyGame}
 Pygame\cite{b4} is a library ideally suited for 2D games, making it a perfect choice for implementing Tetris. It offers a set of tools for managing 2D graphics, such as creating a game window, rendering Tetris pieces, and handling player input. Due to its versatility and simplicity, Pygame is a wise choice for developing Tetris.
-\subsection*{Pytorch}
-Our Tetris game will also be played by an AI, developed using Pytorch\cite{b5}. Pytorch is particularly well-suited for reinforcement learning algorithms, which are essential for training the AI to play Tetris. Pytorch can also simulate the game environment and allow the AI to interact autonomously while learning from its experiences. It enables the AI to generate actions, such as moving and rotating pieces, using a neural network. Importantly, the AI can continue learning in real time without interrupting the game, making Pytorch a complementary tool to Pygame, which provides the game interface and piece manipulation capabilities.
-
-\subsection{Task distribution}
 
 
 \section{Specifications}
@@ -241,7 +233,7 @@ Our Tetris game will also be played by an AI, developed using Pytorch\cite{b5}. 
 \subsection{Game Grid}
 The game grid is represented as a two-dimensional data structure, specifically, a list of lists of integers. In this grid, the value 0 denotes an empty cell, while the value 1 signifies a cell that is occupied by a block. Additionally, a secondary matrix is employed to store the requisite color information for rendering the game grid.
 \subsection{Tetromino Generation}
-Each game piece consists of three key attributes: a shape, a color, and its position coordinates within the grid. To ensure diversity in the generation of these pieces, we employ Python's "random"\cite{b6} library, which allows us to select randomly the colors and shapes.
+Each game piece consists of three key attributes: a shape, a color, and its position coordinates within the grid. To ensure diversity in the generation of these pieces, we employ Python's "random"\cite{b5} library, which allows us to select randomly the colors and shapes.
 \subsection{Movement and Rotation}
 Facilitating player control over the game pieces involves verifying the validity of the requested movements and executing them accordingly. For horizontal (right and left) and vertical (down) movements, the piece's coordinates are simply updated in the respective direction. When it comes to rotation, we perform a 90-degree rotation of the matrix representing the piece's shape.
 \subsection{Controls}
@@ -267,15 +259,18 @@ For rendering various game elements, the "pygame"\cite{b4} library is employed. 
 \end{figure}
 
 \section*{Creation of the AI}
+\subsection{Movement Decision Strategy}
+Developing an adept Tetris-playing AI requires a meticulous approach to evaluate the desirability of each potential move. Our strategy involves identifying pivotal parameters crucial for the AI's decision-making process. These parameters include metrics such as hole count, bumpiness, lines cleared, blocks in the rightmost column, average peak, open holes, and maximum line height. The incorporation of these parameters empowers us to calculate the cost associated with every conceivable move, considering both the current active piece and the upcoming piece.
 
-\subsection{Data Collection}
-In order to train the AI for playing Tetris, we need to collect a dataset of game states and corresponding actions. This involves recording the current state of the game grid, including the positions and shapes of the tetrominoes, as well as the potential actions that can be taken. The dataset should also include the corresponding action that the AI should have taken in that state. This data can be collected by simulating gameplay with human players or through self-play.
-\subsection{Input Processing}
-Once the dataset is collected, we need to process the input data to prepare it for training the AI model. This involves converting the game state information, such as the positions of the tetrominoes and the game grid, into a suitable format that can be fed into the AI model. The input data may also need to be normalized or preprocessed to ensure consistent and meaningful representations.
-\subsection{Strategy Development}
-The AI needs to develop a strategy for playing Tetris effectively. This involves training a machine learning model, using the collected dataset. The model should be trained to predict the best action to take given a particular game state.
-\subsection{Adaptability}
-To make the AI adaptable, it should be able to learn and improve its strategies over time. This can be achieved by continuously updating and retraining the AI model with new data as more gameplay is recorded. The model should be able to generalize its knowledge and adjust its strategies based on the changing game dynamics and patterns observed in the data. This adaptability will allow the AI to become increasingly proficient at playing Tetris.
+\subsection{Training}
+\subsubsection{Genetic Algorithm}
+To pinpoint the optimal parameters, we employ a genetic algorithm, allowing our AI to undergo iterative improvements across generations. This entails creating a diverse population of AIs, implementing a mutation method to introduce genuine genetic diversity, and subsequently identifying and reproducing the most successful AIs from each generation.
+
+\subsubsection{AI Population Formation}
+Initiating the training process necessitates the establishment of a robust AI population. This involves creating a substantial number of AIs to comprehensively explore the parameter space and identify the most effective configurations. Additionally, the development of essential functions is imperative for the seamless functioning of the training process. These functions collectively contribute to the AI's evolution and proficiency in playing Tetris.
+
+
+
 
 \clearpage
 \section{Architecture Design Implementation}
@@ -453,6 +448,19 @@ Regardless of whichever mode the user selects, when the game has reached its lim
 \end{figure} \\
 \end{enumerate}
 
+\section{Software Installation Guide}
+To install our game, you must first install a Python distribution (\url{https://www.python.org/}). You must then install the various libraries necessary to run it, using the command 'pip install -r requirements.txt' in the command prompt. Finally, just run the main.py file and the game starts.
+
+\section{Discussion}
+The realization of our project has been marked by various difficulties. Firstly, the lack of prior experience in the field of artificial intelligence posed a major challenge. None of our team members had a deep understanding of the methods to adopt for developing an AI, leading to uncertainties about the appropriate approach and slowing down our initial progress.
+
+Additionally, communication within the team proved to be a challenge, resulting in significant disparities in task distribution. Difficulties in clearly assigning responsibilities had a negative impact on team cohesion and effectiveness. This lack of coordination led to delays and additional complications in the project's execution.
+
+Concerning the training of the AI, we encountered significant issues. Despite our efforts, the application of various genetic algorithm methods did not yield satisfactory results. Moreover, these approaches consumed a considerable amount of time, adding time pressure to our existing challenges. Attempts to reduce the training duration faced obstacles, with a generation of 100 AIs playing 100 Tetris games taking over an hour.
+
+Lastly, the investment and interest in the project were not uniform across the team, creating a significant imbalance in individual motivation. This disparity affected the quality of work and overall team cohesion. To overcome these obstacles, it is imperative to strengthen communication, explore new training approaches, and rebalance the commitment of each member to ensure the future success of the project.
+
+
 \begin{thebibliography}{00}
 \bibitem{b1} Code Bullet, "I Created An A.I. to DESTROY Tetris", YouTube, [Online]. Available : \url{https://youtu.be/QOJfyp0KMmM?si=dKykHlZGzpcrUu4L} [Accessed Oct. 7, 2023]
 
@@ -462,9 +470,7 @@ Regardless of whichever mode the user selects, when the game has reached its lim
 
 \bibitem{b4} "Pygame Front Page", Pygame, [Online]. Available : \url{https://www.pygame.org/docs/} [Accessed Oct. 10, 2023]
 
-\bibitem{b5} "PyTorch Front Page", PyTorch, [Online]. Available : \url{https://pytorch.org/} [Accessed Oct. 10, 2023]
-
-\bibitem{b6} "random — Generate pseudo-random numbers", Python Docs, [Online]. Available : \url{https://docs.python.org/3/library/random.html} [Accessed Oct. 10, 2023]
+\bibitem{b5} "random — Generate pseudo-random numbers", Python Docs, [Online]. Available : \url{https://docs.python.org/3/library/random.html} [Accessed Oct. 10, 2023]
 
 
 
