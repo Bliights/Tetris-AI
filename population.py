@@ -20,7 +20,7 @@ class Population:
             self.aiPopulation.append(newAi)
         
         self.maxGeneration = maxGeneration
-        self.generation = 0;
+        self.generation = 0
         self.chanceToMutate = chanceToMutate
         self.gradedRetainPercent = gradedRetainPercent 
         self.chanceRetainNongraded = chanceRetainNongraded 
